@@ -1,0 +1,16 @@
+.App-header {
+  display: flex;
+  justify-content: space-between;
+  color: #282c34;
+  border-bottom: #ddd solid 1px;
+}
+
+.Header-title {
+  font-size: calc(10px + 1.5vmin);
+}
+
+.Header-user {
+  font-size: calc(10px + 1.5vmin);
+  display: flex;
+  align-items: center;
+}
