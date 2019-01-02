@@ -1,15 +1,46 @@
 .Countdown {
+  width: 400px;
+  position: relative;
+  margin: 15px 0;
+}
+
+.Countdown-container {
   display: flex;
   justify-content: center;
-  width: 400px;
   border: #dddddd solid 1px;
   border-radius: 5px;
   padding: 10px;
-  margin: 8px 0;
+  
   cursor: pointer;
   user-select: none;
 }
 
 .Countdown-start {
   display: block;
+}
+
+.Countdown-stop {
+  cursor: pointer;
+  user-select: none;
+  position: absolute;
+  top: 0;
+  right: -0.5em;
+  z-index: 1;
+  color: #9C9C97;
+  background: #fff;
+  font-family: Tahoma,sans;
+  line-height: 1rem;
+  margin-top: -.7em;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 2em;
+  font-size: 1rem;
+  text-align: center;
+  font-family: Tahoma,sans;
+}
+
+.Countdown-stop:hover {
+  background-color: #9C9C97;
+  color: #ffffff;
 }

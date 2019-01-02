@@ -38,6 +38,14 @@ export default class Countdown extends Component {
     }
   }
 
+  stopTimer = () => {
+    if(!this.state.stopped) {
+      this.setState({
+        stopped: true,
+      })
+    }
+  }
+
   renderTimer = ({ formatted, completed }) => {
     /* The renderTimer function should align the spec of
     *  https://github.com/ndresx/react-countdown#custom-renderer-with-completed-condition
@@ -52,14 +60,18 @@ export default class Countdown extends Component {
   render() {
     return (
       <div className="Countdown" onClick={this.startTimer}>
+        <div className="Countdown-container">
         { this.state.stopped
           ? <span class="Countdown-start">Start Tomato Timer</span>
           : <CountdownTimer
               className="Countdown-timer"
               date={this.state.stoppedAt}
-              renderer={this.renderTimer}
-          />
+              renderer={this.renderTimer}/>
         } 
+        </div>
+        { !this.state.stopped && 
+          <div className="Countdown-stop" onClick={this.stopTimer}>x</div>
+        }
       </div>
     )
   }
