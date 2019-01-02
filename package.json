@@ -6,6 +6,7 @@
     "react": "^16.7.0",
     "react-countdown-now": "^2.0.2",
     "react-dom": "^16.7.0",
+    "react-progressbar": "^15.4.1",
     "react-scripts": "2.1.2"
   },
   "scripts": {

@@ -1,0 +1,15 @@
+.Countdown {
+  display: flex;
+  justify-content: center;
+  width: 400px;
+  border: #dddddd solid 1px;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 8px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.Countdown-start {
+  display: block;
+}
