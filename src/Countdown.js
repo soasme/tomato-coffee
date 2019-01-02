@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-
 import { default as CountdownTimer } from 'react-countdown-now';
+
+import Commit from './Commit';
 
 import './Countdown.css';
 
-const Completionist = () => <span>You are good to go!</span>;
-const DEFAULT_COUNTDOWN_SECONDS = 1 * 60 * 1000;
+const Completionist = () => <span>You finished a Tomato Timer!</span>;
+const DEFAULT_COUNTDOWN_SECONDS = 25 * 60 * 1000;
 
 export default class Countdown extends Component {
   // The Countdown component displays the countdown timer.
@@ -13,7 +14,23 @@ export default class Countdown extends Component {
   constructor(props) {
     super(props)
 
+    this.transitions = {
+      "PENDING": {
+        "START": "COUNTING",
+      },
+      "COUNTING": {
+        "CANCEL": "PENDING",
+        "COMPLETE": "STOPPED",
+      },
+      "STOPPED": {
+        "CANCEL": "PENDING",
+        "SAVE": "PENDING",
+      }
+    }
+
     this.state = {
+      current: this.props.startState,
+
       // state `stopped` controls if the timer stopped.
       stopped: true,
 
@@ -29,22 +46,33 @@ export default class Countdown extends Component {
     return Date.now() + (this.props.countdownSeconds || DEFAULT_COUNTDOWN_SECONDS);
   }
 
+  transite = (action, newState) => {
+    const transitions = this.transitions[this.state.current];
+    if (!transitions) {
+      throw new Error("invalid current state: " + this.state.current);
+    }
+    const next = transitions[action];
+    if (!action) {
+      throw new Error("invalid action: " + action);
+    }
+    this.setState({
+      ...(newState || {}),
+      current: next,
+    });
+  }
+
   startTimer = () => {
-    if (this.state.stopped) {
-      this.setState({
-        stopped: false,
+    if (this.state.current === "PENDING") {
+      this.transite("START", {
         stoppedAt: this.getCountdownSeconds(),
       })
     }
   }
 
   stopTimer = () => {
-    if(!this.state.stopped) {
-      this.setState({
-        stopped: true,
-      })
-    }
+    this.transite("CANCEL")
   }
+
 
   renderTimer = ({ formatted, completed }) => {
     /* The renderTimer function should align the spec of
@@ -61,15 +89,18 @@ export default class Countdown extends Component {
     return (
       <div className="Countdown" onClick={this.startTimer}>
         <div className="Countdown-container">
-        { this.state.stopped
-          ? <span class="Countdown-start">Start Tomato Timer</span>
-          : <CountdownTimer
-              className="Countdown-timer"
+        { this.state.current === "PENDING"
+          ? <span className="Countdown-start">Start Tomato Timer</span>
+          : <div className="Countdown-timer">
+            <CountdownTimer
+              onStart={this.props.onStart}
+              onComplete={this.props.onComplete}
               date={this.state.stoppedAt}
               renderer={this.renderTimer}/>
+            </div>
         } 
         </div>
-        { !this.state.stopped && 
+        { this.state.current !== "PENDING" && 
           <div className="Countdown-stop" onClick={this.stopTimer}>x</div>
         }
       </div>

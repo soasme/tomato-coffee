@@ -9,7 +9,6 @@
   justify-content: center;
   border: #dddddd solid 1px;
   border-radius: 5px;
-  padding: 10px;
   
   cursor: pointer;
   user-select: none;
@@ -17,6 +16,11 @@
 
 .Countdown-start {
   display: block;
+  padding: 10px;
+}
+
+.Countdown-timer {
+  padding: 10px;
 }
 
 .Countdown-stop {
