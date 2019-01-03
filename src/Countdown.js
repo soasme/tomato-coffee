@@ -1,18 +1,86 @@
 import React, { Component } from 'react';
 import { default as CountdownTimer } from 'react-countdown-now';
+import { Machine } from 'xstate';
 
 import Commit from './Commit';
 
 import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
-const DEFAULT_COUNTDOWN_SECONDS = 25 * 60 * 1000;
+//const DEFAULT_COUNTDOWN_SECONDS = 25 * 60 * 1000;
+const DEFAULT_COUNTDOWN_SECONDS = 1000;
 
 export default class Countdown extends Component {
   // The Countdown component displays the countdown timer.
 
+
   constructor(props) {
     super(props)
+
+    /*
+                       submit
+      +-----------+ <------------+  +----------+
+      |  syncing  |                 |  record  |
+      +----+------+ +------------>  +-----+----+
+          |            error             ^
+          |                              |
+          +---------------------------+  | tomato
+                        success       |  | timeout
+                                      v  +
+                        start
+      +---------+  +-------------->  +-----------+
+      | pending |                    | countdown |
+      +---------+  <--------------+  +-----------+
+                      coffee
+          ^           timeout         ^       +
+          |                           |       |
+          |                    cancle |       | cancle
+          |                           |       |
+          | confirm                   +       v
+          |
+          |                         +-----------+
+          +-----------------------+ |  abandon  |
+                                    +-----------+
+      */
+
+    this.state = {
+      machine: Machine({
+        initial: this.props.initial,
+        context: {
+          startedAt: null,
+          stoppedAt: null,
+        },
+        states: {
+          pending: {
+            on: {
+              START: 'countdown',
+            }
+          },
+          countdown: {
+            on: {
+              CANCLE: 'pending',
+              COMPLETE: 'success',
+            }
+          },
+          aborted: {
+            on: {
+              REVERT: 'countdown',
+              CONFIRM: 'pending',
+            }
+          },
+          success: {
+            initial: 'submitting',
+            states: {
+              submitting: {
+                on: {
+                  SUBMIT: ''
+                }
+              }
+            }
+          }
+        }
+      })
+    }
 
     this.transitions = {
       "PENDING": {
