@@ -80,7 +80,7 @@ export default class Countdown extends Component {
   }
 
   addTomato = async ( {startTime, endTime, description} ) => {
-    const tomato = await this.props.db.addTomato({ startTime, endTime, description})
+    await this.props.db.addTomato({ startTime, endTime, description})
     this.service.send({
       type: "DONE",
       startTime: moment(),

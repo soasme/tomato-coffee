@@ -13,7 +13,6 @@ export default class History extends Component {
       refreshTime: this.props.refreshTime,
       tomatoes: [],
     }
-    console.log("init", props)
   }
 
   componentDidMount() {
@@ -21,7 +20,7 @@ export default class History extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.refreshTime != this.state.refreshTime) {
+    if (nextProps.refreshTime !== this.state.refreshTime) {
       this.loadTomatoes()
     }
   }
@@ -39,7 +38,7 @@ export default class History extends Component {
     return (
       <div className="History">
         {this.state.tomatoes.map((tomato) => (
-          <div className="Record" key={tomato._id}>
+          <div className="Record" key={tomato.id}>
             <span className="Record-timerange">
               {this.renderTime(tomato.startTime)} - {this.renderTime(tomato.endTime)}
             </span>

@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS tomatoes (
+  id UUID not null,
+  userId integer not null,
+  description text not null default '',
+  startTime integer not null,
+  endTime integer not null,
+  createTime integer integer not null,
+  updateTime integer not null,
+  deleteTime integer default 0,
+  PRIMARY KEY  (`id`)
+);
