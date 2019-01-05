@@ -10,32 +10,41 @@ export default class History extends Component {
     super(props)
 
     this.state = {
-      records: []
+      refreshTime: this.props.refreshTime,
+      tomatoes: [],
     }
+    console.log("init", props)
   }
 
   componentDidMount() {
-    this.setState({
-      records: [
-        {"id": 1, "start": 1546421940, "end": 1546422000, "content": "#tomatocoffee started."}
-      ]
-    })
+    this.loadTomatoes()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.refreshTime != this.state.refreshTime) {
+      this.loadTomatoes()
+    }
+  }
+
+  loadTomatoes = async () => {
+    const tomatoes = await this.props.db.getTomatoes()
+    this.setState({ tomatoes: tomatoes })
   }
 
   renderTime = (timestamp) => {
-    return moment(timestamp * 1000).format('LT');
+    return moment(timestamp).format('HH:mm');
   }
 
   render() {
     return (
       <div className="History">
-        {this.state.records.map((record) => (
-          <div className="Record" key="{record.id}">
+        {this.state.tomatoes.map((tomato) => (
+          <div className="Record" key={tomato._id}>
             <span className="Record-timerange">
-              {this.renderTime(record.start)} - {this.renderTime(record.end)}
+              {this.renderTime(tomato.startTime)} - {this.renderTime(tomato.endTime)}
             </span>
             &nbsp;
-            <span className="Record-content">{record.content}</span>
+            <span className="Record-content">{tomato.description}</span>
           </div>
         ))}
       </div>

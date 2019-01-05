@@ -8,8 +8,8 @@ import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 25 * 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 1000;//25 * 60 * 1000;
+const REST_COUNTDOWN_SECONDS = 1000;//5 * 60 * 1000;
 
 const countdownMachine = Machine({
   id: 'countdown',
@@ -90,12 +90,14 @@ export default class Countdown extends Component {
 
   handleDescriptionChange = (e) => {
     this.setState({description: e.target.value});
+    
   }
 
   submitTomato = (e) => {
     this.service.send({
       type: "SUBMIT",
     })
+    e.preventDefault()
 
     this.addTomato({
       startTime: this.state.startTime,
@@ -148,28 +150,17 @@ export default class Countdown extends Component {
       )
     }
 
-    if (current.matches("recording")) {
+    if (current.matches("recording") || current.matches("syncing")) {
+      const disabled = current.matches("syncing");
       return (
         <div className="Countdown">
           <div className="Countdown-container">
             <form onSubmit={this.submitTomato}>
               <input className="Countdown-record" type="text" name="description"
-                value={this.state.description} onChange={this.handleDescriptionChange} />
-              <span className="Countdown-submit">↩</span>
-            </form>
-          </div>
-          <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
-        </div>
-      )
-    }
-
-    if (current.matches("syncing")) {
-      return (
-        <div className="Countdown">
-          <div className="Countdown-container">
-          <form onSubmit={this.submitTomato}>
-              <input className="Countdown-record" type="text" name="description"
-                value={this.state.description} disabled="disabled" />
+                value={this.state.description}
+                onChange={this.handleDescriptionChange}
+                disabled={disabled}
+                />
               <span className="Countdown-submit">↩</span>
             </form>
           </div>

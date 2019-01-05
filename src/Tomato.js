@@ -5,6 +5,7 @@ import './Tomato.css';
 import Countdown from './Countdown';
 import Database from './Database';
 import History from './History';
+import moment from 'moment';
 
 export default class Tomato extends Component {
 
@@ -12,18 +13,15 @@ export default class Tomato extends Component {
     super(props)
 
     this.state = {
-      db: new Database()
+      db: new Database(),
+      refreshTime: moment(),
     }
   }
 
   onCountdownonTransition = (data) => {
     if (data.type === "DONE") {
-      this.loadRecords()
+      this.setState({ refreshTime: moment() })
     }
-  }
-
-  loadRecords = async () => {
-
   }
 
   render() {
@@ -33,6 +31,7 @@ export default class Tomato extends Component {
           db={this.state.db}
           onTransition={this.onCountdownonTransition} />
         <History
+          refreshTime={this.state.refreshTime}
           db={this.state.db} />
       </div>
     )

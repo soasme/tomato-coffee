@@ -14,7 +14,7 @@ export default class Database {
       "updateTime": now
     }
     const tomatoes = await this.getTomatoes()
-    tomatoes.push(tomato);
+    tomatoes.splice(0, 0, tomato);
     window.localStorage.setItem("tomatoes", JSON.stringify(tomatoes));
     return tomato;
   }
