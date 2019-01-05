@@ -43,6 +43,7 @@ export default class Database {
       }
     }))
     window.localStorage.setItem("tomatoes", JSON.stringify(newTomatoes));
+
     // sync remote tomatoes.
   }
 

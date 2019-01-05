@@ -14,8 +14,20 @@ export default class Tomato extends Component {
 
     this.state = {
       db: new Database(),
+      refreshInterval: 10 * 1000,
       refreshTime: moment(),
     }
+  }
+
+  componentDidMount () {
+    setTimeout(() => {
+      this.state.db.syncRemote()
+    }, this.state.refreshInterval)
+  }
+
+  synchronize = async () => {
+    await this.state.db.syncRemote()
+    this.setState({ refreshTime: moment() })
   }
 
   onCountdownonTransition = (data) => {
