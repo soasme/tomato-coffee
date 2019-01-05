@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { default as CountdownTimer } from 'react-countdown-now';
 import { Machine } from 'xstate';
+import moment from 'moment';
 import { interpret } from 'xstate/lib/interpreter';
 
 import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 1000; // 25 * 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 1000; // 5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 25 * 60 * 1000;
+const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
 
 const countdownMachine = Machine({
   id: 'countdown',
@@ -35,11 +36,19 @@ const countdownMachine = Machine({
 export default class Countdown extends Component {
 
   state = {
+    startTime: null,
+    endTime: null,
+    description: "",
     current: countdownMachine.initialState
   };
 
   service = interpret(countdownMachine)
-    .onTransition(current => this.setState({ ...current.event, current }));
+    .onTransition(current => {
+      this.setState({ ...current.event, current });
+      if (this.props.onTransition) {
+        this.props.onTransition({ ...current.event, current });
+      }
+    });
 
   componentDidMount() {
     this.service.start();
@@ -50,7 +59,7 @@ export default class Countdown extends Component {
   }
 
   activate = () => {
-    const now = Date.now();
+    const now = moment()
     this.service.send({
       type: "ACTIVATE",
       startTime: now,
@@ -68,25 +77,31 @@ export default class Countdown extends Component {
     this.service.send({
       type: "DONE"
     })
-   
   }
 
-  record = (e) => {
-    if (e.key === 'Enter') {
-      this.service.send({
-        type: "SUBMIT"
-      })
+  addTomato = async ( {startTime, endTime, description} ) => {
+    const tomato = await this.props.db.addTomato({ startTime, endTime, description})
+    this.service.send({
+      type: "DONE",
+      startTime: moment(),
+      endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
+    })
+  }
 
-      // TODO: send out a real request.
-      setTimeout(() => {
-        const now = Date.now();
-        this.service.send({
-          type: "DONE",
-          startTime: now,
-          endTime: now + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS)
-        })
-      }, 1000)
-    }
+  handleDescriptionChange = (e) => {
+    this.setState({description: e.target.value});
+  }
+
+  submitTomato = (e) => {
+    this.service.send({
+      type: "SUBMIT",
+    })
+
+    this.addTomato({
+      startTime: this.state.startTime,
+      endTime: moment(),
+      description: this.state.description,
+    })
   }
 
   renderTimer = ({ formatted, completed }) => {
@@ -137,8 +152,11 @@ export default class Countdown extends Component {
       return (
         <div className="Countdown">
           <div className="Countdown-container">
-            <input className="Countdown-record" type="text" onKeyPress={(e) => this.record(e)} />
-            <span className="Countdown-submit">↩</span>
+            <form onSubmit={this.submitTomato}>
+              <input className="Countdown-record" type="text" name="description"
+                value={this.state.description} onChange={this.handleDescriptionChange} />
+              <span className="Countdown-submit">↩</span>
+            </form>
           </div>
           <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
         </div>
@@ -149,7 +167,11 @@ export default class Countdown extends Component {
       return (
         <div className="Countdown">
           <div className="Countdown-container">
-            <input className="Countdown-record" type="text" disabled="disabled" text="syncing..." />
+          <form onSubmit={this.submitTomato}>
+              <input className="Countdown-record" type="text" name="description"
+                value={this.state.description} disabled="disabled" />
+              <span className="Countdown-submit">↩</span>
+            </form>
           </div>
           <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
         </div>

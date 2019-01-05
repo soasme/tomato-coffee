@@ -9,6 +9,7 @@
     "react-dom": "^16.7.0",
     "react-progressbar": "^15.4.1",
     "react-scripts": "2.1.2",
+    "uuid": "^3.3.2",
     "xstate": "^4.2.3"
   },
   "scripts": {

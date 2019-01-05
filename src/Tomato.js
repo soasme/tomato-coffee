@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './Tomato.css';
 
 import Countdown from './Countdown';
+import Database from './Database';
 import History from './History';
 
 export default class Tomato extends Component {
@@ -11,35 +12,28 @@ export default class Tomato extends Component {
     super(props)
 
     this.state = {
-      
+      db: new Database()
     }
   }
 
-  onStart = (delta) => {
-    console.log('start', delta);
+  onCountdownonTransition = (data) => {
+    if (data.type === "DONE") {
+      this.loadRecords()
+    }
   }
 
-  onComplete = (delta) => {
-    console.log('complete', delta);
-  }
+  loadRecords = async () => {
 
-  onRest = (delta) => {
-    console.log('rest', delta);
-  }
-
-  onCancle = () => {
-    console.log('cancle');
   }
 
   render() {
     return (
       <div className="Tomato">
         <Countdown
-          startState="PENDING"
-          onStart={this.onStart}
-          onRest={this.onRest}
-          onComplete={this.onComplete} />
-        <History />
+          db={this.state.db}
+          onTransition={this.onCountdownonTransition} />
+        <History
+          db={this.state.db} />
       </div>
     )
   }
