@@ -83,7 +83,7 @@ export default class App extends Component {
         <Header />
         <Tomato />
         <TodoHeader addTodo={this.actions.addTodo} />
-        <Todo todos={this.state.todos} actions={this.actions} />/
+        <Todo todos={this.state.todos} actions={this.actions} />
       </div>
     );
   }
