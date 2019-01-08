@@ -8,8 +8,8 @@ import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 1000;//25 * 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 1000;//5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 25* 60 * 1000;
+const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
 
 const countdownMachine = Machine({
   id: 'countdown',
@@ -19,13 +19,13 @@ const countdownMachine = Machine({
       on: { ACTIVATE: 'working' }
     },
     working: {
-      on: { CANCLE: 'idle', DONE: 'recording'}
+      on: { CANCLE: 'idle', DONE: 'extending'}
     },
-    recording: {
+    extending: {
       on: { CANCLE: 'idle', SUBMIT: 'syncing' }
     },
     syncing: {
-      on: { DONE: 'resting' }
+      on: { DONE: 'resting', ERROR: 'extending' }
     },
     resting: {
       on: { CANCLE: 'idle', DONE: 'idle' }
@@ -79,31 +79,22 @@ export default class Countdown extends Component {
     })
   }
 
-  addTomato = async ( {startTime, endTime, description} ) => {
-    const tomato = await this.props.db.addTomato({ startTime, endTime, description})
+  sync = (e) => {
+    console.log(e)
     this.service.send({
-      type: "DONE",
-      startTime: moment(),
-      endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
+      type: 'SUBMIT',
     })
-  }
 
-  handleDescriptionChange = (e) => {
-    this.setState({description: e.target.value});
-    
-  }
+    setTimeout(() => {
+      this.service.send({
+        type: 'DONE',
+        startTime: moment(),
+        endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
+      })
+      // error condition: send type: ERROR.
+    }, 1000)
 
-  submitTomato = (e) => {
-    this.service.send({
-      type: "SUBMIT",
-    })
     e.preventDefault()
-
-    this.addTomato({
-      startTime: this.state.startTime,
-      endTime: moment(),
-      description: this.state.description,
-    })
   }
 
   renderTimer = ({ formatted, completed }) => {
@@ -150,19 +141,12 @@ export default class Countdown extends Component {
       )
     }
 
-    if (current.matches("recording") || current.matches("syncing")) {
-      const disabled = current.matches("syncing");
+    if (current.matches("extending") || current.matches("syncing")) {
+      const onClick = current.matches("syncing") ? (e) => {} : this.sync;
       return (
-        <div className="Countdown">
+        <div className="Countdown" onClick={onClick}>
           <div className="Countdown-container">
-            <form onSubmit={this.submitTomato}>
-              <input className="Countdown-record" type="text" name="description"
-                value={this.state.description}
-                onChange={this.handleDescriptionChange}
-                disabled={disabled}
-                />
-              <span className="Countdown-submit">↩</span>
-            </form>
+            <span className="Countdown-start">Click to Take a break.</span>
           </div>
           <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
         </div>
