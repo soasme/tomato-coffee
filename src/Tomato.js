@@ -42,9 +42,7 @@ export default class Tomato extends Component {
         <Countdown
           db={this.state.db}
           onTransition={this.onCountdownonTransition} />
-        <History
-          refreshTime={this.state.refreshTime}
-          db={this.state.db} />
+        
       </div>
     )
   }
