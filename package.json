@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
+    "client-oauth2": "^4.2.3",
     "moment": "^2.23.0",
+    "query-string": "^6.2.0",
     "react": "^16.7.0",
     "react-countdown-now": "^2.0.2",
     "react-dom": "^16.7.0",
@@ -24,6 +26,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://127.0.0.1:5000",
   "eslintConfig": {
     "extends": "react-app"
   },
