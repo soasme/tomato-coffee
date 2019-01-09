@@ -1,79 +1,83 @@
-import React, {Component, PropTypes} from 'react'
-import TodoItem from './TodoItem'
-import Footer from './TodoFooter'
+import React, { Component } from 'react';
+import TodoList from './TodoList';
+import TodoHeader from './TodoHeader';
 
- const TODO_FILTERS = {
-   SHOW_ALL: () => true,
-   SHOW_ACTIVE: todo => !todo.completed,
-   SHOW_COMPLETED: todo => todo.completed
- }
+const initialState = [
+  {
+    text: 'Hello World',
+    completed: false,
+    id: 0
+  }
+]
 
- export default class Todo extends Component {
-//    static propTypes = {
-//      todos: PropTypes.array.isRequired,
-//      actions: PropTypes.object.isRequired
-//    }
+export default class Todo extends Component {
 
-   state = { filter: 'SHOW_ALL' }
+  constructor(props) {
+    super(props)
+    this.state = {
+      todos: initialState,
+    }
+  }
 
-   handleClearCompleted = () => {
-     this.props.actions.clearCompleted()
-   }
+  addTodo = (text) => {
+    const todos = [
+      {
+        id: this.state.todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+        completed: false,
+        text: text
+      },
+      ...this.state.todos
+    ]
+    this.setState({todos})
+  }
 
-   handleShow = filter => {
-     this.setState({ filter })
-   }
+  deleteTodo = (id) => {
+    const todos = this.state.todos.filter(todo => todo.id !== id)
+    this.setState({todos})
+  }
 
-   renderToggleAll(completedCount) {
-     const { todos, actions } = this.props
-     if (todos.length > 0) {
-       return (
-         <input
-           className="toggle-all"
-           type="checkbox"
-           checked={completedCount === todos.length}
-           onChange={actions.completeAll}
-         />
-       )
-     }
-   }
+  editTodo = (id, text) => {
+    const todos = this.state.todos.map(todo =>
+      todo.id === id ? {...todo, text} : todo
+    )
+    this.setState({todos})
+  }
 
-   renderFooter(completedCount) {
-     const { todos } = this.props
-     const { filter } = this.state
-     const activeCount = todos.length - completedCount
+  completeTodo = (id) => {
+    const todos = this.state.todos.map(todo =>
+      todo.id === id ? {...todo, completed: !todo.completed} : todo
+    )
+    this.setState({todos})
+  }
 
-     if (todos.length) {
-       return (
-         <Footer
-           completedCount={completedCount}
-           activeCount={activeCount}
-           filter={filter}
-           onClearCompleted={this.handleClearCompleted.bind(this)}
-           onShow={this.handleShow.bind(this)} />
-       )
-     }
-   }
+  completeAll = () => {
+    const areAllMarked = this.state.todos.every(todo => todo.completed)
+    const todos = this.state.todos.map(todo => {
+      return {...todo, completed: !areAllMarked}
+    })
+    this.setState({todos})
+  }
 
-   render() {
-     const { todos, actions } = this.props
-     const { filter } = this.state
+  clearCompleted = () => {
+    const todos = this.state.todos.filter(todo => todo.completed === false)
+    this.setState({todos})
+  }
 
-     const filteredTodos = todos.filter(TODO_FILTERS[filter])
-     const completedCount = todos.reduce((count, todo) => {
-       return todo.completed ? count + 1 : count
-     }, 0)
+  actions = {
+    addTodo: this.addTodo,
+    deleteTodo: this.deleteTodo,
+    editTodo: this.editTodo,
+    completeTodo: this.completeTodo,
+    completeAll: this.completeAll,
+    clearCompleted: this.clearCompleted
+  }
 
-     return (
-       <section className="main">
-         {this.renderToggleAll(completedCount)}
-         <ul className="todo-list">
-           {filteredTodos.map(todo =>
-             <TodoItem key={todo.id} todo={todo} {...actions} />
-           )}
-         </ul>
-         {this.renderFooter(completedCount)}
-       </section>
-     )
-   }
- }
+  render() {
+    return (
+      <div className="Todo">
+        <TodoHeader addTodo={this.actions.addTodo} />
+        <TodoList todos={this.state.todos} actions={this.actions} />
+      </div>
+    );
+  }
+}
