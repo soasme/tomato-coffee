@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
+
+import g from './g'
 
 const initialState = [
   // {
@@ -15,42 +18,77 @@ export default class Todo extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      error: null,
       todos: initialState,
     }
   }
 
-  addTodo = (text) => {
-    const todos = [
-      {
-        id: this.state.todos.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-        completed: false,
-        text: text
-      },
-      ...this.state.todos
-    ]
-    this.setState({todos})
+  componentDidMount = () => {
+    this.loadTodos()
   }
 
-  deleteTodo = (id) => {
-    const todos = this.state.todos.filter(todo => todo.id !== id)
-    this.setState({todos})
+  loadTodos = async () => {
+    try {
+      this.setState({todos: await g.loadTodos(), error: null})
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
   }
 
-  editTodo = (id, text) => {
-    const todos = this.state.todos.map(todo =>
-      todo.id === id ? {...todo, text} : todo
-    )
-    this.setState({todos})
+  addTodo = async (text) => {
+    try {
+      const success = await g.addTodo(text)
+      if (success) {
+        this.setState({todos: await g.loadTodos(), error: null})
+      } else {
+        this.setState({error: 'adding failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
   }
 
-  completeTodo = (id) => {
-    const todos = this.state.todos.map(todo =>
-      todo.id === id ? {...todo, completed: !todo.completed} : todo
-    )
-    this.setState({todos})
+  deleteTodo = async (id) => {
+    try {
+      const success = await g.deleteTodo(id)
+      if (success) {
+        this.setState({todos: await g.loadTodos(), error: null})
+      } else {
+        this.setState({error: 'delete failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
   }
 
-  completeAll = () => {
+  editTodo = async (id, text) => {
+    try {
+      const success = await g.editTodo(id, text)
+      if (success) {
+        this.setState({todos: await g.loadTodos(), error: null})
+      } else {
+        this.setState({error: 'edit failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
+  }
+
+  completeTodo = async (id) => {
+    try {
+      const todo = this.state.todos.filter(todo => todo.id === id)
+      const success = await g.completeTodo(id, !todo[0].completed)
+      if (success) {
+        this.setState({todos: await g.loadTodos(), error: null})
+      } else {
+        this.setState({error: 'mark complete failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
+  }
+
+  completeAll = async () => {
     const areAllMarked = this.state.todos.every(todo => todo.completed)
     const todos = this.state.todos.map(todo => {
       return {...todo, completed: !areAllMarked}
@@ -58,7 +96,7 @@ export default class Todo extends Component {
     this.setState({todos})
   }
 
-  clearCompleted = () => {
+  clearCompleted = async () => {
     const todos = this.state.todos.filter(todo => todo.completed === false)
     this.setState({todos})
   }
