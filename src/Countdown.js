@@ -8,8 +8,8 @@ import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 25* 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 1000; //25* 60 * 1000;
+const REST_COUNTDOWN_SECONDS = 1000; //5 * 60 * 1000;
 
 const countdownMachine = Machine({
   id: 'countdown',
@@ -79,19 +79,46 @@ export default class Countdown extends Component {
     })
   }
 
+  saveTimer = async () => {
+    try {
+      const res = await fetch("/v1/timers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
+        },
+        body: JSON.stringify({
+          started_at: this.state.startTime.unix(),
+          ended_at: moment().unix()
+        })
+      })
+
+      if (res.status === 201) {
+        this.service.send({
+          type: 'DONE',
+          startTime: moment(),
+          endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
+        })
+      } else {
+        this.service.send({
+          type: 'ERROR',
+          error: new Error("status: " + res.status)
+        })
+      }
+    } catch (error) {
+      this.service.send({
+        type: 'ERROR',
+        error: error
+      })
+    }
+  }
+
   sync = (e) => {
     this.service.send({
       type: 'SUBMIT',
     })
 
-    setTimeout(() => {
-      this.service.send({
-        type: 'DONE',
-        startTime: moment(),
-        endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
-      })
-      // error condition: send type: ERROR.
-    }, 1000)
+    this.saveTimer()
 
     e.preventDefault()
   }

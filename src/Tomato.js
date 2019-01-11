@@ -40,9 +40,7 @@ export default class Tomato extends Component {
     return (
       <div className="Tomato">
         <Countdown
-          db={this.state.db}
           onTransition={this.onCountdownonTransition} />
-        
       </div>
     )
   }

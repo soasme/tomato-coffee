@@ -3,11 +3,11 @@ import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
 
 const initialState = [
-  {
-    text: 'Hello World',
-    completed: false,
-    id: 0
-  }
+  // {
+  //   text: 'Hello World',
+  //   completed: false,
+  //   id: 0
+  // }
 ]
 
 export default class Todo extends Component {
