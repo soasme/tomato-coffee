@@ -1,4 +1,17 @@
+import moment from 'moment';
+
 class Global {
+
+  loadTimers = async () => {
+    const res = await fetch("/v1/timers", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
+      }
+    })
+    const todos = await res.json()
+    return todos
+  }
 
   loadTodos = async () => {
     const res = await fetch("/v1/tasks", {
@@ -59,7 +72,8 @@ class Global {
         "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
       },
       body: JSON.stringify({
-        completed: completed
+        completed: completed,
+        completed_at: moment().unix()
       })
     })
     return res.status === 200

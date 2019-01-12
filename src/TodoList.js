@@ -27,14 +27,17 @@ import Footer from './TodoFooter'
    renderToggleAll(completedCount) {
      const { todos, actions } = this.props
      if (todos.length > 0) {
-       return (
+       return (<>
          <input
            className="toggle-all"
            type="checkbox"
            checked={completedCount === todos.length}
            onChange={actions.completeAll}
          />
-       )
+         <label
+							htmlFor="toggle-all"
+						/>
+       </>)
      }
    }
 

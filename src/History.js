@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import moment from 'moment';
+import g from './g';
 
 import './History.css';
 
@@ -11,23 +12,64 @@ export default class History extends Component {
 
     this.state = {
       refreshTime: this.props.refreshTime,
-      tomatoes: [],
+      todos: {},
+      timers: {},
+      events: {},
     }
   }
 
   componentDidMount() {
-    this.loadTomatoes()
+    this.loadEvents()
   }
 
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     if (nextProps.refreshTime !== this.state.refreshTime) {
       this.loadTomatoes()
     }
-  }
+  }*/
 
-  loadTomatoes = async () => {
+  /*loadTomatoes = async () => {
     const tomatoes = await this.props.db.getTomatoes()
     this.setState({ tomatoes: tomatoes })
+  }*/
+
+  loadEvents = async () => {
+    try {
+      const events = {}
+
+      const todos = {}
+      const rawTodos = await g.loadTodos()
+      rawTodos.forEach(todo => {
+        if (todo.completed) {
+          todos[todo.id] = todo
+          const date = moment(todo.completed_at * 1000).hour(0).minute(0).second(0).toDate();
+          if (!events[date]) {
+            events[date] = []
+          }
+          console.log(date, moment(todo.completed_at * 1000));
+          events[date].push({type: 'todo', id: todo.id})
+        }
+      });
+
+      const timers = {}
+      const rawTimers = await g.loadTimers()
+      rawTimers.forEach(timer => {
+        timers[timer.id] = timer
+        const date = moment(timer.ended_at * 1000).hour(0).minute(0).second(0).toDate();
+        if (!events[date]) {
+          events[date] = []
+        }
+        events[date].push({type: 'timer', id: timer.id})
+      })
+
+      this.setState({todos: todos, timers: timers, events: events})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  renderDate = (date) => {
+    return moment(date).format("YYYY-MM-DD");
   }
 
   renderTime = (timestamp) => {
@@ -37,15 +79,42 @@ export default class History extends Component {
   render() {
     return (
       <div className="History">
-        {this.state.tomatoes.map((tomato) => (
-          <div className="Record" key={tomato.id}>
-            <span className="Record-timerange">
-              {this.renderTime(tomato.startTime)} - {this.renderTime(tomato.endTime)}
-            </span>
-            &nbsp;
-            <span className="Record-content">{tomato.description}</span>
-          </div>
-        ))}
+        <h1>History</h1>
+        {Object.keys(this.state.events).map((date) => {
+          const events = this.state.events[date];
+          return (
+            <div>
+              <h3>{this.renderDate(date)}</h3>
+              {events.map(event => {
+                let obj;
+                if (event.type == 'todo') {
+                  obj = this.state.todos[event.id]
+                  return (
+                    <div className="Record" key={"todo" + event.id}>
+                      <span className="Record-timerange">
+                        {this.renderTime(obj.completed_at * 1000)}
+                      </span>
+                      &nbsp;
+                      <span className="Record-content">{obj.text}</span>
+                    </div>
+                  )
+                } else if (event.type == 'timer') {
+                  obj = this.state.timers[event.id]
+                  return (
+                    <div className="Record" key={"timer" + event.id}>
+                      <span className="Record-timerange">
+                        {this.renderTime(obj.started_at * 1000)} - {this.renderTime(obj.ended_at * 1000)}
+                      </span>
+                      &nbsp;
+                      <span className="Record-content">Tomato timer completed.</span>
+                    </div>
+                  )
+                }
+                return <span>{event.id}</span>
+              })}
+            </div>
+          )
+        })}
       </div>
     )
   }

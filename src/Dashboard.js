@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Header from './Header';
 import Tomato from './Tomato';
 import Todo from './Todo';
+import History from './History';
+
+import './Dashboard.css';
 
 export default class Dashboard extends Component {
 
@@ -53,10 +56,17 @@ export default class Dashboard extends Component {
     }
     const { auth } = this.state
     return (
-      <div className="App">
+      <div className="Dashboard">
         <Header user={ auth }/>
-        <Tomato />
-        <Todo />
+        <div style={{display: "flex"}}>
+          <div className="sidebar">
+            <Tomato />
+            <Todo />
+          </div>
+          <div className="container">
+            <History />
+          </div>
+        </div>
       </div>
     )
   }

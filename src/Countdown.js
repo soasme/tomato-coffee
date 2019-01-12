@@ -8,8 +8,8 @@ import './Countdown.css';
 
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 1000; //25* 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 1000; //5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 25* 60 * 1000;
+const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
 
 const countdownMachine = Machine({
   id: 'countdown',

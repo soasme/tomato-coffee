@@ -1,8 +1,53 @@
 {
-    "timers": [
-        {"id": 1, "started_at": 1547151480, "ended_at": 1547149980}
-    ],
-    "tasks": [
-        {"id": 1, "completed": false, "title": "Hello World"}
-    ]
+  "timers": [
+    {
+      "id": 1,
+      "started_at": 1547149980,
+      "ended_at": 1547151480
+    }
+  ],
+  "tasks": [
+    {
+      "completed": false,
+      "text": "Integrate \"clear completed\" to backend API.",
+      "id": 5
+    },
+    {
+      "completed": false,
+      "text": "Better error display.",
+      "id": 6
+    },
+    {
+      "completed": false,
+      "text": "Click \"login\" and show \"Sign Out\" button.",
+      "id": 7
+    },
+    {
+      "completed": false,
+      "text": "Support dragging the tasks.",
+      "id": 8
+    },
+    {
+      "completed": true,
+      "text": "Hello World",
+      "id": 9,
+      "completed_at": 1547286876
+    },
+    {
+      "completed": true,
+      "text": "Display history by dates.",
+      "id": 10,
+      "completed_at": 1547288819
+    },
+    {
+      "completed": false,
+      "text": "Bugfix: history in date sorted by time desc.",
+      "id": 11
+    },
+    {
+      "completed": false,
+      "text": "Support snapshot current timer to localStorage.",
+      "id": 12
+    }
+  ]
 }

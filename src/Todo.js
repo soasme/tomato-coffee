@@ -5,6 +5,8 @@ import TodoHeader from './TodoHeader';
 
 import g from './g'
 
+import './Todo.css';
+
 const initialState = [
   // {
   //   text: 'Hello World',

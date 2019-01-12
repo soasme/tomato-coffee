@@ -22,10 +22,10 @@ export default class Footer extends Component {
     const itemWord = activeCount === 1 ? 'item' : 'items'
 
     return (
-      <span className="todo-count">
+      <div className="todo-count">
         <strong>{activeCount || 'No'}</strong>
         {itemWord} left
-      </span>
+      </div>
     )
   }
 
@@ -67,13 +67,18 @@ export default class Footer extends Component {
     return (
       <footer className="footer">
 
-        {this.renderTodoCount()}
+        
 
         <ul className="filters">
           {this.renderFilterList()}
         </ul>
 
-        {this.renderClearButton()}
+        <div className="footer-info">
+          {this.renderTodoCount()}
+          {this.renderClearButton()}
+        </div>
+
+        
 
       </footer>
     )
