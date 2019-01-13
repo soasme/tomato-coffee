@@ -84,11 +84,25 @@ export default class Countdown extends Component {
     if (this.props.initialState) {
       this.setState({ current: this.props.initialState });
     }
-    this.service.start();
+
+    try {
+      const frozenState = window.localStorage.getItem('countdown-state')
+      const currentState = State.create(JSON.parse(frozenState));
+      this.service.start(currentState);
+    } catch (error) {
+      this.service.start();
+    }
+    
+    setInterval(this.takeSnapshot, 5000);
   }
 
   componentWillUnmount() {
     this.service.stop();
+  }
+
+  takeSnapshot = async () => {
+    const frozenState = JSON.stringify(this.state.current);
+    window.localStorage.setItem('countdown-state', frozenState);
   }
 
   activate = () => {
@@ -123,7 +137,7 @@ export default class Countdown extends Component {
           "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
         },
         body: JSON.stringify({
-          started_at: startTime.unix(),
+          started_at: moment(startTime).unix(),
           ended_at: moment().unix()
         })
       })
@@ -185,7 +199,7 @@ export default class Countdown extends Component {
 
     if (current.matches("working") || current.matches("resting")) {
       const onComplete = current.matches("working") ? this.workDone : this.restDone;
-      const { endTime } = current.context;
+      const endTime = moment(current.context.endTime);
       return (
         <div className="Countdown">
           <div className="Countdown-container">
