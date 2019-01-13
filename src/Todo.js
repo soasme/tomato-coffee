@@ -31,7 +31,7 @@ export default class Todo extends Component {
 
   loadTodos = async () => {
     try {
-      this.setState({todos: await g.loadTodos(), error: null})
+      this.setState({todos: await g.loadTodos(false), error: null})
     } catch (error) {
       this.setState({error: error.toString()})
     }
@@ -41,7 +41,7 @@ export default class Todo extends Component {
     try {
       const success = await g.addTodo(text)
       if (success) {
-        this.setState({todos: await g.loadTodos(), error: null})
+        this.setState({todos: await g.loadTodos(false), error: null})
       } else {
         this.setState({error: 'adding failed'})
       }
@@ -54,7 +54,7 @@ export default class Todo extends Component {
     try {
       const success = await g.deleteTodo(id)
       if (success) {
-        this.setState({todos: await g.loadTodos(), error: null})
+        this.setState({todos: await g.loadTodos(false), error: null})
       } else {
         this.setState({error: 'delete failed'})
       }
@@ -67,7 +67,7 @@ export default class Todo extends Component {
     try {
       const success = await g.editTodo(id, text)
       if (success) {
-        this.setState({todos: await g.loadTodos(), error: null})
+        this.setState({todos: await g.loadTodos(false), error: null})
       } else {
         this.setState({error: 'edit failed'})
       }
@@ -81,7 +81,7 @@ export default class Todo extends Component {
       const todo = this.state.todos.filter(todo => todo.id === id)
       const success = await g.completeTodo(id, !todo[0].completed)
       if (success) {
-        this.setState({todos: await g.loadTodos(), error: null})
+        this.setState({todos: await g.loadTodos(false), error: null})
       } else {
         this.setState({error: 'mark complete failed'})
       }

@@ -45,9 +45,28 @@
       "id": 11
     },
     {
-      "completed": false,
+      "completed": true,
       "text": "Support snapshot current timer to localStorage.",
-      "id": 12
+      "id": 12,
+      "completed_at": 1547318866
+    },
+    {
+      "completed": true,
+      "text": "Bugfix: statemachine invalid transition. https://spectrum.chat/statecharts/general/any-document-for-upgrade-xstate-from-v3-x-to-v4~691d24bf-d099-474a-b2e3-638e9ed41914",
+      "id": 13,
+      "completed_at": 1547335563
+    },
+    {
+      "completed": true,
+      "text": "Start running test cases.",
+      "id": 14,
+      "completed_at": 1547339151
+    },
+    {
+      "completed": true,
+      "text": "Load active todos in sidebar and completed todos in the container.",
+      "id": 15,
+      "completed_at": 1547339725
     }
   ]
 }

@@ -13,8 +13,16 @@ class Global {
     return todos
   }
 
-  loadTodos = async () => {
-    const res = await fetch("/v1/tasks", {
+  loadTodos = async (completed) => {
+    let params;
+    if (completed === true) {
+      params = '?completed=true'
+    } else if (completed === false) {
+      params = '?completed=false'
+    } else {
+      params = ''
+    }
+    const res = await fetch("/v1/tasks" + params, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
