@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import g from './g';
 
+import TodoItem from './TodoItem';
+
 import './History.css';
 
 export default class History extends Component {
@@ -21,17 +23,6 @@ export default class History extends Component {
   componentDidMount() {
     this.loadEvents()
   }
-
-  /*componentWillReceiveProps(nextProps) {
-    if (nextProps.refreshTime !== this.state.refreshTime) {
-      this.loadTomatoes()
-    }
-  }*/
-
-  /*loadTomatoes = async () => {
-    const tomatoes = await this.props.db.getTomatoes()
-    this.setState({ tomatoes: tomatoes })
-  }*/
 
   loadEvents = async () => {
     try {
@@ -68,12 +59,65 @@ export default class History extends Component {
     }
   }
 
+  deleteTodo = async (id) => {
+    try {
+      const success = await g.deleteTodo(id)
+      if (success) {
+        await this.loadEvents()
+      } else {
+        this.setState({error: 'delete failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
+  }
+
+  editTodo = async (id, text) => {
+    try {
+      const success = await g.editTodo(id, text)
+      if (success) {
+        await this.loadEvents()
+      } else {
+        this.setState({error: 'edit failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
+  }
+
+  completeTodo = async (id) => {
+    try {
+      const todo = this.state.todos[id]
+      const success = await g.completeTodo(id, !todo.completed)
+      if (success) {
+        await this.loadEvents()
+      } else {
+        this.setState({error: 'mark complete failed'})
+      }
+    } catch (error) {
+      this.setState({error: error.toString()})
+    }
+  }
+
   renderDate = (date) => {
     return moment(date).format("YYYY-MM-DD");
   }
 
   renderTime = (timestamp) => {
     return moment(new Date(timestamp)).format('HH:mm');
+  }
+
+  renderTodo = (todo) => {
+    const actions = {
+      deleteTodo: this.deleteTodo,
+      editTodo: this.editTodo,
+      completeTodo: this.completeTodo,
+    }
+    return (
+      <ul className="todo-list">
+        <TodoItem key={todo.id} todo={todo} {...actions} />
+      </ul>
+    )
   }
 
   render() {
@@ -95,7 +139,9 @@ export default class History extends Component {
                         {this.renderTime(obj.completed_at * 1000)}
                       </span>
                       &nbsp;
-                      <span className="Record-content">{obj.text}</span>
+                      <span className="Record-content">
+                        {this.renderTodo(obj)}
+                      </span>
                     </div>
                   )
                 } else if (event.type == 'timer') {

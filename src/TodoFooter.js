@@ -19,12 +19,11 @@ export default class Footer extends Component {
   renderTodoCount() {
     const {activeCount} = this.props
 
-    const itemWord = activeCount === 1 ? 'item' : 'items'
+    const itemWord = activeCount === 1 ? 'task' : 'tasks'
 
     return (
       <div className="todo-count">
-        <strong>{activeCount || 'No'}</strong>
-        {itemWord} left
+        <strong>{activeCount || 'No'}</strong> <span>{itemWord} left</span>
       </div>
     )
   }
@@ -54,32 +53,13 @@ export default class Footer extends Component {
     }
   }
 
-  renderFilterList() {
-    return ['SHOW_ALL', 'SHOW_ACTIVE', 'SHOW_COMPLETED']
-      .map(filter =>
-        <li key={filter}>
-          {this.renderFilterLink(filter)}
-        </li>
-    )
-  }
-
   render() {
     return (
       <footer className="footer">
-
-        
-
-        <ul className="filters">
-          {this.renderFilterList()}
-        </ul>
-
         <div className="footer-info">
           {this.renderTodoCount()}
           {this.renderClearButton()}
         </div>
-
-        
-
       </footer>
     )
   }
