@@ -29,12 +29,6 @@
     },
     {
       "completed": true,
-      "text": "Hello World",
-      "id": 9,
-      "completed_at": 1547286876
-    },
-    {
-      "completed": true,
       "text": "Display history by dates.",
       "id": 10,
       "completed_at": 1547288819
@@ -67,6 +61,18 @@
       "text": "Load active todos in sidebar and completed todos in the container.",
       "id": 15,
       "completed_at": 1547339725
+    },
+    {
+      "completed": true,
+      "text": "Test Hello World",
+      "id": 16,
+      "completed_at": 1547340771
+    },
+    {
+      "completed": true,
+      "text": "Integrate TodoItem to the History.",
+      "id": 17,
+      "completed_at": 1547341018
     }
   ]
 }
