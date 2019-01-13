@@ -1,56 +1,89 @@
 import React, { Component } from 'react';
 import { default as CountdownTimer } from 'react-countdown-now';
-import { Machine } from 'xstate';
+import { Machine, State, actions } from 'xstate';
 import moment from 'moment';
 import { interpret } from 'xstate/lib/interpreter';
 
 import './Countdown.css';
 
+const { assign } = actions;
 const Completionist = () => <span>You finished a Tomato Timer!</span>;
 
-const WORK_COUNTDOWN_SECONDS = 25* 60 * 1000;
-const REST_COUNTDOWN_SECONDS = 5 * 60 * 1000;
+const WORK_COUNTDOWN_SECONDS = 10;
+const REST_COUNTDOWN_SECONDS = 5;
 
 const countdownMachine = Machine({
   id: 'countdown',
   initial: 'idle',
+  context: {
+    startTime: null,
+    endTime: null,
+  },
   states: {
     idle: {
-      on: { ACTIVATE: 'working' }
+      on: {
+        ACTIVATE: {
+          target: 'working',
+          actions: 'countdown',
+        }
+      }
     },
     working: {
-      on: { CANCLE: 'idle', DONE: 'extending'}
+      on: {
+        CANCLE: { target: 'idle' },
+        DONE: { target: 'extending' },
+      },
     },
     extending: {
-      on: { CANCLE: 'idle', SUBMIT: 'syncing' }
+      on: {
+        CANCLE: { target: 'idle' },
+        SUBMIT: { target: 'syncing' },
+      }
     },
     syncing: {
-      on: { DONE: 'resting', ERROR: 'extending' }
+      on: {
+        DONE: { target: 'resting', actions: 'countdown'},
+        ERROR: { target: 'extending' },
+      }
     },
     resting: {
-      on: { CANCLE: 'idle', DONE: 'idle' }
+      on: {
+        CANCLE: {
+          target: 'idle',
+        },
+        DONE: {
+          target: 'idle',
+          
+        }
+      }
     }
+  },
+}, {
+  actions: {
+    countdown: assign((ctx, event) => {
+      return {
+        startTime: event.startTime,
+        endTime: event.endTime
+      }
+    })
   }
 });
 
 export default class Countdown extends Component {
 
   state = {
-    startTime: null,
-    endTime: null,
-    description: "",
     current: countdownMachine.initialState
   };
 
   service = interpret(countdownMachine)
     .onTransition(current => {
-      this.setState({ ...current.event, current });
-      if (this.props.onTransition) {
-        this.props.onTransition({ ...current.event, current });
-      }
+      this.setState({ current });
     });
 
   componentDidMount() {
+    if (this.props.initialState) {
+      this.setState({ current: this.props.initialState });
+    }
     this.service.start();
   }
 
@@ -59,11 +92,12 @@ export default class Countdown extends Component {
   }
 
   activate = () => {
-    const now = moment()
+    const start = moment();
+    const end = start.add(this.props.countdownSeconds || WORK_COUNTDOWN_SECONDS, 'seconds');
     this.service.send({
       type: "ACTIVATE",
-      startTime: now,
-      endTime: now + (this.props.countdownSeconds || WORK_COUNTDOWN_SECONDS)
+      startTime: start,
+      endTime: end,
     })
   }
 
@@ -80,6 +114,7 @@ export default class Countdown extends Component {
   }
 
   saveTimer = async () => {
+    const { startTime, endTime } = this.state.current.context;
     try {
       const res = await fetch("/v1/timers", {
         method: "POST",
@@ -88,7 +123,7 @@ export default class Countdown extends Component {
           "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
         },
         body: JSON.stringify({
-          started_at: this.state.startTime.unix(),
+          started_at: startTime.unix(),
           ended_at: moment().unix()
         })
       })
@@ -97,7 +132,7 @@ export default class Countdown extends Component {
         this.service.send({
           type: 'DONE',
           startTime: moment(),
-          endTime: moment() + (this.props.countdownSeconds || REST_COUNTDOWN_SECONDS),
+          endTime: moment().add(this.props.countdownSeconds || REST_COUNTDOWN_SECONDS, 'seconds'),
         })
       } else {
         this.service.send({
@@ -148,17 +183,16 @@ export default class Countdown extends Component {
       )
     }
 
-    const { endTime } = this.state;
-
     if (current.matches("working") || current.matches("resting")) {
       const onComplete = current.matches("working") ? this.workDone : this.restDone;
+      const { endTime } = current.context;
       return (
         <div className="Countdown">
           <div className="Countdown-container">
             <div className="Countdown-timer">
               <CountdownTimer
                 onComplete={onComplete}
-                date={endTime}
+                date={endTime.toDate()}
                 renderer={this.renderTimer}/>
             </div>
           </div>

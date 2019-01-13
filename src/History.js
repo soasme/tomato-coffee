@@ -42,7 +42,7 @@ export default class History extends Component {
       rawTodos.forEach(todo => {
         if (todo.completed) {
           todos[todo.id] = todo
-          const date = moment(todo.completed_at * 1000).hour(0).minute(0).second(0).toDate();
+          const date = moment(new Date(todo.completed_at * 1000)).hour(0).minute(0).second(0).toDate();
           if (!events[date]) {
             events[date] = []
           }
@@ -55,7 +55,7 @@ export default class History extends Component {
       const rawTimers = await g.loadTimers()
       rawTimers.forEach(timer => {
         timers[timer.id] = timer
-        const date = moment(timer.ended_at * 1000).hour(0).minute(0).second(0).toDate();
+        const date = moment(new Date(timer.ended_at * 1000)).hour(0).minute(0).second(0).toDate();
         if (!events[date]) {
           events[date] = []
         }
@@ -73,7 +73,7 @@ export default class History extends Component {
   }
 
   renderTime = (timestamp) => {
-    return moment(timestamp).format('HH:mm');
+    return moment(new Date(timestamp)).format('HH:mm');
   }
 
   render() {
@@ -83,7 +83,7 @@ export default class History extends Component {
         {Object.keys(this.state.events).map((date) => {
           const events = this.state.events[date];
           return (
-            <div>
+            <div key={date.toString()}>
               <h3>{this.renderDate(date)}</h3>
               {events.map(event => {
                 let obj;

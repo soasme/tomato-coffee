@@ -20,27 +20,26 @@ export default class Tomato extends Component {
   }
 
   componentDidMount () {
-    setTimeout(() => {
-      this.state.db.syncRemote()
-    }, this.state.refreshInterval)
+    // setTimeout(() => {
+    //   this.state.db.syncRemote()
+    // }, this.state.refreshInterval)
   }
 
   synchronize = async () => {
-    await this.state.db.syncRemote()
-    this.setState({ refreshTime: moment() })
+    // await this.state.db.syncRemote()
+    // this.setState({ refreshTime: moment() })
   }
 
   onCountdownonTransition = (data) => {
-    if (data.type === "DONE") {
-      this.setState({ refreshTime: moment() })
-    }
+    // if (data.type === "DONE") {
+    //   this.setState({ refreshTime: moment() })
+    // }
   }
 
   render() {
     return (
       <div className="Tomato">
-        <Countdown
-          onTransition={this.onCountdownonTransition} />
+        <Countdown />
       </div>
     )
   }
