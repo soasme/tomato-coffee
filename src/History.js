@@ -124,7 +124,7 @@ export default class History extends Component {
     return (
       <div className="History">
         <h1>History</h1>
-        {Object.keys(this.state.events).map((date) => {
+        {Object.keys(this.state.events).sort().reverse().map((date) => {
           const events = this.state.events[date];
           return (
             <div key={date.toString()}>
@@ -152,7 +152,7 @@ export default class History extends Component {
                         {this.renderTime(obj.started_at * 1000)} - {this.renderTime(obj.ended_at * 1000)}
                       </span>
                       &nbsp;
-                      <span className="Record-content">Tomato timer completed.</span>
+                      <span className="Record-content" style={{fontSize: '2rem'}}> 🍅 </span>
                     </div>
                   )
                 }
