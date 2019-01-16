@@ -53,7 +53,6 @@ const countdownMachine = Machine({
         },
         DONE: {
           target: 'idle',
-          
         }
       }
     }
@@ -92,8 +91,10 @@ export default class Countdown extends Component {
     } catch (error) {
       this.service.start();
     }
-    
-    setInterval(this.takeSnapshot, 5000);
+
+    // TODO: A better solution is to intercept state change and then take snapshot.
+    // But I couldn't figure it out how to make it.
+    setInterval(this.takeSnapshot, 1000);
   }
 
   componentWillUnmount() {
@@ -101,8 +102,10 @@ export default class Countdown extends Component {
   }
 
   takeSnapshot = async () => {
-    const frozenState = JSON.stringify(this.state.current);
-    window.localStorage.setItem('countdown-state', frozenState);
+    if (this.state.current.event.type !== 'xstate.init') {
+      const frozenState = JSON.stringify(this.state.current);
+      window.localStorage.setItem('countdown-state', frozenState);
+    }
   }
 
   activate = () => {
@@ -110,8 +113,8 @@ export default class Countdown extends Component {
     const end = start.add(this.props.countdownSeconds || WORK_COUNTDOWN_SECONDS, 'seconds');
     this.service.send({
       type: "ACTIVATE",
-      startTime: start,
-      endTime: end,
+      startTime: start.format(),
+      endTime: end.format(),
     })
   }
 
@@ -128,7 +131,9 @@ export default class Countdown extends Component {
   }
 
   saveTimer = async () => {
-    const { startTime, endTime } = this.state.current.context;
+    const { rawStartTime, rawEndTime } = this.state.current.context;
+    const startTime = moment(rawStartTime);
+    const endTime = moment(rawEndTime);
     try {
       const res = await fetch("/v1/timers", {
         method: "POST",
