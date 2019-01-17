@@ -180,7 +180,6 @@
 
 .todo-list li.completed label {
 	color: #777;
-	text-decoration: line-through;
 }
 
 .todo-list li .destroy {
