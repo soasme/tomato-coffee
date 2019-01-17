@@ -8,6 +8,11 @@ variable "app-version" {
   type = "string"
 }
 
+variable "database-plan" {
+  type = "string"
+  default = "hobby-dev"
+}
+
 variable "region" {
   type = "string"
   default = "us"
@@ -59,6 +64,6 @@ resource "heroku_build" "app" {
 
 resource "heroku_addon" "database" {
   app  = "${heroku_app.app.name}"
-  plan = "heroku-postgresql:hobby-basic"
+  plan = "heroku-postgresql:${var.database-plan}"
 }
 
