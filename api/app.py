@@ -11,6 +11,7 @@ def create_app():
         'GITHUB_CLIENT_ID': environ.get('GITHUB_CLIENT_ID'),
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
     })
+    print(app.config)
 
     from .core import db
     db.init_app(app)
@@ -80,8 +81,10 @@ def create_app():
 
     app.add_url_rule('/v1/timers', view_func=views.get_timers)
     app.add_url_rule('/v1/timers', methods=['POST'], view_func=views.add_timer)
+    app.add_url_rule('/v1/timers/<int:id>', methods=['DELETE'], view_func=views.delete_timer)
     app.add_url_rule('/v1/tasks', view_func=views.get_tasks)
     app.add_url_rule('/v1/tasks', methods=['POST'], view_func=views.add_task)
     app.add_url_rule('/v1/tasks/<int:id>', methods=['PATCH'], view_func=views.update_task)
+    app.add_url_rule('/v1/tasks/<int:id>', methods=['DELETE'], view_func=views.delete_task)
 
     return app

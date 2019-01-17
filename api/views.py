@@ -45,6 +45,18 @@ def add_timer():
     db.session.commit()
     return '', 201
 
+def delete_timer(id):
+    try:
+        user = get_user()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+    timer = Timer.query.get(id)
+    if timer.user_id != user.id:
+        return jsonify({'error': 'not found'}), 404
+    db.session.delete(timer)
+    db.session.commit()
+    return '', 200
+
 def get_tasks():
     completed_at_gte = request.args.get('completed_at_gte', type=int, default=int(time()) - 7*3600)
     completed_at_lte = request.args.get('completed_at_lte', type=int, default=int(time()))
@@ -94,5 +106,17 @@ def update_task(id):
     if 'completed' in data:
         task.completed = bool(completed)
     db.session.add(task)
+    db.session.commit()
+    return '', 200
+
+def delete_task(id):
+    try:
+        user = get_user()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+    task = Task.query.get(id)
+    if task.user_id != user.id:
+        return jsonify({'error': 'not found'}), 404
+    db.session.delete(task)
     db.session.commit()
     return '', 200
