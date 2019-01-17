@@ -102,9 +102,9 @@ def update_task(id):
     data = request.get_json()
     task = Task.query.get(id)
     if 'text' in data:
-        task.text = text
+        task.text = data['text']
     if 'completed' in data:
-        task.completed = bool(completed)
+        task.completed = bool(data['completed'])
     db.session.add(task)
     db.session.commit()
     return '', 200

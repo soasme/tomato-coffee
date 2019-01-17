@@ -206,7 +206,7 @@ export default class History extends Component {
                         {this.renderTime(obj.started_at * 1000)} - {this.renderTime(obj.ended_at * 1000)}
                       </span>
                       &nbsp;
-                      <span className="Record-content" style={{fontSize: '2rem'}}> 🍅 </span>
+                      <span className="Record-content" style={{fontSize: '2rem'}}>&nbsp;🍅</span>
                     </div>
                   )
                 }
