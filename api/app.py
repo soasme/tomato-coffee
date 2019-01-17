@@ -14,7 +14,6 @@ def create_app():
         'GITHUB_CLIENT_ID': environ.get('GITHUB_CLIENT_ID'),
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
     })
-    print(app.config)
 
     from .core import db
     db.init_app(app)
