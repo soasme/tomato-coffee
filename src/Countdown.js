@@ -110,7 +110,7 @@ export default class Countdown extends Component {
 
   activate = () => {
     const start = moment();
-    const end = start.add(this.props.countdownSeconds || WORK_COUNTDOWN_SECONDS, 'seconds');
+    const end = moment().add(this.props.countdownSeconds || WORK_COUNTDOWN_SECONDS, 'seconds');
     this.service.send({
       type: "ACTIVATE",
       startTime: start.format(),
