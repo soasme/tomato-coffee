@@ -66,4 +66,3 @@ resource "heroku_addon" "database" {
   app  = "${heroku_app.app.name}"
   plan = "heroku-postgresql:${var.database-plan}"
 }
-

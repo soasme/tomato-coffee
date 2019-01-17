@@ -7,7 +7,10 @@ def create_app():
 
     app.config.update(**{
         'SECRET_KEY': environ.get('SECRET_KEY') or 'xxxx',
-        'SQLALCHEMY_DATABASE_URI': environ.get('SQLALCHEMY_DATABASE_URI'),
+        'SQLALCHEMY_DATABASE_URI': (
+            environ.get('SQLALCHEMY_DATABASE_URI')
+            or environ.get('DATABASE_URL')
+        ),
         'GITHUB_CLIENT_ID': environ.get('GITHUB_CLIENT_ID'),
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
     })
