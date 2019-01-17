@@ -4,7 +4,7 @@ const proxy = require('http-proxy-middleware')
 const app = express();
 const host = '0.0.0.0';
 const port = Number(process.env.PORT || 3000);
-const apiPort = Number(port + 2000);
+const apiPort = 5000;
 const api = 'http://' + host + ':' + apiPort;
 
 app.use(express.static(path.join(__dirname, 'build')));
