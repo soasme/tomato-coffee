@@ -17,6 +17,7 @@ export default class History extends Component {
       refreshTime: this.props.refreshTime,
       startTime: moment().subtract(3, 'days').format(),
       endTime: moment().format(),
+      showCalendar: false,
       todos: {},
       timers: {},
       events: {},
@@ -109,10 +110,14 @@ export default class History extends Component {
     }
   }
 
+  toggleCalendar = () => {
+    this.setState({ showCalendar: true })
+  }
   handleCalendarChange = value => {
     this.setState({
       startTime: moment(value[0]).format(),
       endTime: moment(value[1]).format(),
+      showCalendar: false,
     });
     this.loadEvents()
   }
@@ -153,10 +158,20 @@ export default class History extends Component {
     return (
       <div className="History">
         <h1>History</h1>
-        <Calendar
-          selectRange={true}
-          onChange={this.handleCalendarChange}
-          value={[moment(this.state.startTime).toDate(), moment(this.state.endTime).toDate()]} />
+        {this.state.showCalendar ?
+          <Calendar
+            className="calendar"
+            selectRange={true}
+            onChange={this.handleCalendarChange}
+            value={[moment(this.state.startTime).toDate(), moment(this.state.endTime).toDate()]} />
+          :
+          <div className="calendar-selected">
+            Records in between &nbsp;
+            <span style={{ borderBottom: 'solid 1px #ddd' }} onClick={this.toggleCalendar}>
+              {moment(this.state.startTime).format("MM-DD")} - {moment(this.state.endTime).format("MM-DD")}
+            </span>
+          </div>
+        }
         {Object.keys(this.state.events).sort().reverse().map((date) => {
           const events = this.state.events[date].sort((e1, e2) => {
             if (this.getEventTime(e1).isBefore(this.getEventTime(e2))) {
