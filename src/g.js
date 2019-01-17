@@ -2,8 +2,24 @@ import moment from 'moment';
 
 class Global {
 
-  loadTimers = async () => {
-    const res = await fetch("/v1/timers", {
+  buildUrl = (url, parameters) => {
+    let qs = "";
+    for (const key in parameters) {
+        if (parameters.hasOwnProperty(key)) {
+            const value = parameters[key];
+            qs +=
+                encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+        }
+    }
+    if (qs.length > 0) {
+        qs = qs.substring(0, qs.length - 1); //chop off last "&"
+        url = url + "?" + qs;
+    }
+    return url;
+  }
+
+  loadTimers = async ({ startTime, endTime}) => {
+    const res = await fetch(this.buildUrl("/v1/timers", {ended_at_gte: startTime, ended_at_lte: endTime}), {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
@@ -13,16 +29,18 @@ class Global {
     return todos
   }
 
-  loadTodos = async (completed) => {
-    let params;
-    if (completed === true) {
-      params = '?completed=true'
-    } else if (completed === false) {
-      params = '?completed=false'
+  loadTodos = async ({ completed, startTime, endTime }) => {
+    let url;
+    if (startTime === undefined || endTime === undefined) {
+      url = this.buildUrl("/v1/tasks", { completed })
     } else {
-      params = ''
+      url = this.buildUrl("/v1/tasks", {
+        completed,
+        completed_at_gte: startTime,
+        completed_at_lte: endTime,
+      })
     }
-    const res = await fetch("/v1/tasks" + params, {
+    const res = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token

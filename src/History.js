@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import moment from 'moment';
+import Calendar from 'react-calendar';
 import g from './g';
 
 import TodoItem from './TodoItem';
@@ -14,6 +15,8 @@ export default class History extends Component {
 
     this.state = {
       refreshTime: this.props.refreshTime,
+      startTime: moment().subtract(3, 'days').format(),
+      endTime: moment().format(),
       todos: {},
       timers: {},
       events: {},
@@ -29,7 +32,11 @@ export default class History extends Component {
       const events = {}
 
       const todos = {}
-      const rawTodos = await g.loadTodos()
+      const rawTodos = await g.loadTodos({
+        completed: true,
+        startTime: moment(this.state.startTime).unix(),
+        endTime: moment(this.state.endTime).unix()
+      })
       rawTodos.forEach(todo => {
         if (todo.completed) {
           todos[todo.id] = todo
@@ -43,7 +50,10 @@ export default class History extends Component {
       });
 
       const timers = {}
-      const rawTimers = await g.loadTimers()
+      const rawTimers = await g.loadTimers({
+        startTime: moment(this.state.startTime).unix(),
+        endTime: moment(this.state.endTime).unix()
+      })
       rawTimers.forEach(timer => {
         timers[timer.id] = timer
         const date = moment(new Date(timer.ended_at * 1000)).hour(0).minute(0).second(0).toDate();
@@ -99,6 +109,14 @@ export default class History extends Component {
     }
   }
 
+  handleCalendarChange = value => {
+    this.setState({
+      startTime: moment(value[0]).format(),
+      endTime: moment(value[1]).format(),
+    });
+    this.loadEvents()
+  }
+
   renderDate = (date) => {
     return moment(date).format("YYYY-MM-DD");
   }
@@ -135,6 +153,10 @@ export default class History extends Component {
     return (
       <div className="History">
         <h1>History</h1>
+        <Calendar
+          selectRange={true}
+          onChange={this.handleCalendarChange}
+          value={[moment(this.state.startTime).toDate(), moment(this.state.endTime).toDate()]} />
         {Object.keys(this.state.events).sort().reverse().map((date) => {
           const events = this.state.events[date].sort((e1, e2) => {
             if (this.getEventTime(e1).isBefore(this.getEventTime(e2))) {

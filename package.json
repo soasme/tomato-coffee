@@ -9,6 +9,7 @@
     "moment": "^2.23.0",
     "query-string": "^6.2.0",
     "react": "^16.7.0",
+    "react-calendar": "^2.17.5",
     "react-countdown-now": "^2.0.2",
     "react-dom": "^16.7.0",
     "react-progressbar": "^15.4.1",
