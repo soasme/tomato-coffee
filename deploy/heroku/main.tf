@@ -56,3 +56,9 @@ resource "heroku_build" "app" {
     version = "${var.app-version}"
   }
 }
+
+resource "heroku_addon" "database" {
+  app  = "${heroku_app.app.name}"
+  plan = "heroku-postgresql:hobby-basic"
+}
+
