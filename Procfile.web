@@ -1,2 +1,2 @@
 dash: node app.js
-api: flask run
+api: flask run --port=0.0.0.0
