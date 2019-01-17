@@ -45,7 +45,6 @@ export default class History extends Component {
           if (!events[date]) {
             events[date] = []
           }
-          console.log(date, moment(todo.completed_at * 1000));
           events[date].push({type: 'todo', id: todo.id})
         }
       });
@@ -147,7 +146,6 @@ export default class History extends Component {
     if (event.type === 'todo') {
       return moment(this.state.todos[event.id].completed_at * 1000);
     } else if (event.type === 'timer') {
-      console.log(this.state.timers)
       return moment(this.state.timers[event.id].ended_at * 1000);
     } else {
       throw new Error('unknown event type: ' + event.type);
@@ -172,7 +170,9 @@ export default class History extends Component {
             </span>
           </div>
         }
-        {Object.keys(this.state.events).sort().reverse().map((date) => {
+        {Object.keys(this.state.events).sort((d1, d2) => {
+          if (moment(d1).isBefore(moment(d2))) { return 1 } else { return -1 }
+        }).map((date) => {
           const events = this.state.events[date].sort((e1, e2) => {
             if (this.getEventTime(e1).isBefore(this.getEventTime(e2))) {
               return 1;

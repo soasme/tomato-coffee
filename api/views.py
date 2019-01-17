@@ -105,6 +105,7 @@ def update_task(id):
         task.text = data['text']
     if 'completed' in data:
         task.completed = bool(data['completed'])
+        task.completed_at = int(time())
     db.session.add(task)
     db.session.commit()
     return '', 200
