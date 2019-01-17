@@ -3,6 +3,7 @@ import { default as CountdownTimer } from 'react-countdown-now';
 import { Machine, State, actions } from 'xstate';
 import moment from 'moment';
 import { interpret } from 'xstate/lib/interpreter';
+import { pad } from './Utils';
 
 import './Countdown.css';
 
@@ -119,12 +120,14 @@ export default class Countdown extends Component {
   }
 
   workDone = () => {
+    window.document.title = 'Buzzzzzz, take a break | Tomato Coffee';
     this.service.send({
       type: "DONE"
     })
   }
 
   restDone = () => {
+    window.document.title = 'Tomato Coffee';
     this.service.send({
       type: "DONE"
     })
@@ -188,6 +191,16 @@ export default class Countdown extends Component {
     return <span>{minutes}:{seconds}</span>;
   }
 
+  renderDocumentTitle = (delta) => {
+    if (delta !== undefined) {
+      if (this.state.current.matches("extending")) {
+        window.document.title = 'Buzzzz!!! Take a break' + ' | Tomato Coffee';
+      } else {
+        window.document.title = '' + pad(delta.minutes, 2) + ':' + pad(delta.seconds, 2) + ' | ' + 'Tomato Coffee';
+      }
+    }
+  }
+
   render() {
     const { current } = this.state;
     const { send } = this.service;
@@ -211,6 +224,7 @@ export default class Countdown extends Component {
             <div className="Countdown-timer">
               <CountdownTimer
                 onComplete={onComplete}
+                onTick={this.renderDocumentTitle}
                 date={endTime.toDate()}
                 renderer={this.renderTimer}/>
             </div>
