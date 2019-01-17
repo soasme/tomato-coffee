@@ -12,6 +12,29 @@ Or, init python server:
 python3 -mvenv venv
 source venv/bin/activate
 pip install -r requirements.txt
+vi .env
+flask run
+```
+
+To start the dashboard,
+
+```
+yarn start
+```
+
+Runs the app in the development mode.<br>
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+To test the dashboard,
+
+```
+yarn test
+```
+
+To build the dashboard,
+
+```
+yarn run build
 ```
 
 ---
@@ -24,8 +47,6 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.

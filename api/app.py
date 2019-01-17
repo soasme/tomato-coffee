@@ -13,6 +13,7 @@ def create_app():
         ),
         'GITHUB_CLIENT_ID': environ.get('GITHUB_CLIENT_ID'),
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
+        'GITHUB_REDIRECT_URI': environ.get('GITHUB_REDIRECT_URI'),
     })
 
     from .core import db
@@ -34,7 +35,7 @@ def create_app():
 
     @app.route('/v1/auth/login')
     def get_login_url():
-        redirect_uri = 'http://127.0.0.1:3000/auth/github/callback'
+        redirect_uri = app.config['GITHUB_REDIRECT_URI']
         res = oauth.github.authorize_redirect(redirect_uri)
         return jsonify({
             'url': res.headers['location']
