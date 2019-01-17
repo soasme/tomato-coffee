@@ -26,6 +26,11 @@ variable "github-client-secret" {
   type = "string"
 }
 
+variable "github-redirect-uri" {
+  type = "string"
+  default = "https://${var.app-name}.herokuapp.com/auth/github/callback"
+}
+
 variable "secret-key" {
   type = "string"
 }
@@ -39,10 +44,12 @@ resource "heroku_app" "app" {
     name = "${var.app-name}"
     region = "${var.region}"
 
+    # PORT, DATABASE_URI are injected by heroku
     config_vars {
         SECRET_KEY = "${var.secret-key}"
         GITHUB_CLIENT_ID = "${var.github-client-id}"
         GITHUB_CLIENT_SECRET = "${var.github-client-secret}"
+        GITHUB_REDIRECT_URI = "${var.github-redirect-uri}"
     }
 
     buildpacks = [
