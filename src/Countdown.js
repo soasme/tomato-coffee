@@ -131,9 +131,9 @@ export default class Countdown extends Component {
   }
 
   saveTimer = async () => {
-    const { rawStartTime, rawEndTime } = this.state.current.context;
-    const startTime = moment(rawStartTime);
-    const endTime = moment(rawEndTime);
+    const { startTime, endTime } = this.state.current.context;
+    const rawStartTime = moment(startTime);
+    const rawEndTime = moment(endTime);
     try {
       const res = await fetch("/v1/timers", {
         method: "POST",
@@ -142,7 +142,7 @@ export default class Countdown extends Component {
           "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
         },
         body: JSON.stringify({
-          started_at: moment(startTime).unix(),
+          started_at: moment(rawStartTime).unix(),
           ended_at: moment().unix()
         })
       })
