@@ -76,4 +76,12 @@ def create_app():
         db.create_all()
         return jsonify({'msg': 'ok'})
 
+    from . import views
+
+    app.add_url_rule('/v1/timers', view_func=views.get_timers)
+    app.add_url_rule('/v1/timers', methods=['POST'], view_func=views.add_timer)
+    app.add_url_rule('/v1/tasks', view_func=views.get_tasks)
+    app.add_url_rule('/v1/tasks', methods=['POST'], view_func=views.add_task)
+    app.add_url_rule('/v1/tasks/<int:id>', methods=['PATCH'], view_func=views.update_task)
+
     return app

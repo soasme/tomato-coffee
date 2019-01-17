@@ -25,12 +25,27 @@ class Timer(db.Model):
     updated_at = db.Column(db.Integer, nullable=False, default=datetime.utcnow)
     deleted_at = db.Column(db.Integer, nullable=True)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'started_at': self.started_at,
+            'ended_at': self.ended_at,
+        }
+
 class Task(db.Model):
     id = db.Column(db.Integer, nullable=False, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     completed = db.Column(db.Boolean, nullable=False, default=0) # 0: todo, 1: done
-    title = db.Column(db.String(1024), nullable=False, default='')
-    description = db.Column(db.Text)
+    text = db.Column(db.String(1024), nullable=False, default='')
+    completed_at = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.Integer, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.Integer, nullable=False, default=datetime.utcnow)
     deleted_at = db.Column(db.Integer, nullable=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'completed_at': self.completed_at,
+            'completed': self.completed,
+            'text': self.text,
+        }

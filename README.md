@@ -6,6 +6,14 @@ Init json server:
 ./node_modules/.bin/json-server --watch mock/db.json --routes mock/routes.json --port 5000 --middlewares mock/auth.js
 ```
 
+Or, init python server:
+
+```
+python3 -mvenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
 ---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
