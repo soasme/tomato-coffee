@@ -46,9 +46,9 @@ resource "heroku_app" "app" {
     }
 
     buildpacks = [
-      "https://github.com/dpiddy/heroku-buildpack-runit.git",
       "heroku/python",
       "heroku/nodejs",
+      "https://github.com/dpiddy/heroku-buildpack-runit.git",
     ]
 }
 

@@ -1,0 +1,2 @@
+dash: serve -s build
+api: flask run
