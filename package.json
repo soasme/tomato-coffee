@@ -5,6 +5,8 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "client-oauth2": "^4.2.3",
+    "express": "^4.16.4",
+    "http-proxy-middleware": "^0.19.1",
     "json-server": "^0.14.2",
     "moment": "^2.23.0",
     "query-string": "^6.2.0",
@@ -15,7 +17,6 @@
     "react-progressbar": "^15.4.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.2",
-    "serve": "^10.1.1",
     "uuid": "^3.3.2",
     "xstate": "^4.2.3"
   },
