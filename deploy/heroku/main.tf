@@ -28,7 +28,6 @@ variable "github-client-secret" {
 
 variable "github-redirect-uri" {
   type = "string"
-  default = "https://${var.app-name}.herokuapp.com/auth/github/callback"
 }
 
 variable "secret-key" {

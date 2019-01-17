@@ -11,6 +11,7 @@ def create_app():
             environ.get('SQLALCHEMY_DATABASE_URI')
             or environ.get('DATABASE_URL')
         ),
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False,
         'GITHUB_CLIENT_ID': environ.get('GITHUB_CLIENT_ID'),
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
         'GITHUB_REDIRECT_URI': environ.get('GITHUB_REDIRECT_URI'),
