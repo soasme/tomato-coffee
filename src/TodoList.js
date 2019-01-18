@@ -86,7 +86,7 @@ import Footer from './TodoFooter'
      return (
        <section className="main">
          {this.renderToggleAll(completedCount)}
-         <SortableTodoList items={filteredTodos} onSortEnd={this.handleSort} />
+         <SortableTodoList items={filteredTodos} onSortEnd={this.handleSort} distance={10}/>
          {this.renderFooter(completedCount)}
        </section>
      )
