@@ -3,7 +3,8 @@ import moment from 'moment';
 import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
 
-import g from './g'
+import g from './g';
+import { arrayMove } from './Utils';
 
 import './Todo.css';
 
@@ -103,13 +104,20 @@ export default class Todo extends Component {
     this.setState({todos})
   }
 
+  sortTodo = async ({oldIndex, newIndex}) => {
+    const todos = arrayMove(this.state.todos.slice(), oldIndex, newIndex);
+    console.log(todos, oldIndex, newIndex)
+    this.setState({todos});
+  }
+
   actions = {
     addTodo: this.addTodo,
     deleteTodo: this.deleteTodo,
     editTodo: this.editTodo,
     completeTodo: this.completeTodo,
     completeAll: this.completeAll,
-    clearCompleted: this.clearCompleted
+    clearCompleted: this.clearCompleted,
+    sortTodo: this.sortTodo,
   }
 
   render() {

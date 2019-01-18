@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import TodoItem from './TodoItem'
 import Footer from './TodoFooter'
 
@@ -14,7 +15,7 @@ import Footer from './TodoFooter'
 //      actions: PropTypes.object.isRequired
 //    }
 
-   state = { filter: 'SHOW_ALL' }
+   state = { filter: 'SHOW_ALL', todos: [] }
 
    handleClearCompleted = () => {
      this.props.actions.clearCompleted()
@@ -22,6 +23,10 @@ import Footer from './TodoFooter'
 
    handleShow = filter => {
      this.setState({ filter })
+   }
+
+   handleSort = ({oldIndex, newIndex}) => {
+     this.props.actions.sortTodo({oldIndex, newIndex})
    }
 
    renderToggleAll(completedCount) {
@@ -67,14 +72,21 @@ import Footer from './TodoFooter'
        return todo.completed ? count + 1 : count
      }, 0)
 
+     const SortableTodoItem = SortableElement(({ value }) =>
+       <TodoItem key={value.id} todo={value} {...actions} />
+     );
+     const SortableTodoList = SortableContainer(({ items }) => {
+        return <ul className="todo-list">
+          {items.map((todo, index)=>
+            <SortableTodoItem key={todo.id} index={index} value={todo} />
+          )}
+        </ul>
+     })
+
      return (
        <section className="main">
          {this.renderToggleAll(completedCount)}
-         <ul className="todo-list">
-           {filteredTodos.map(todo =>
-             <TodoItem key={todo.id} todo={todo} {...actions} />
-           )}
-         </ul>
+         <SortableTodoList items={filteredTodos} onSortEnd={this.handleSort} />
          {this.renderFooter(completedCount)}
        </section>
      )

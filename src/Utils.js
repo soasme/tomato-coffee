@@ -69,3 +69,20 @@ export const pad = function (n, width, z) {
   n = n + '';
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
+
+export const arrayMove = (arr, old_index, new_index) => {
+    while (old_index < 0) {
+        old_index += arr.length;
+    }
+    while (new_index < 0) {
+        new_index += arr.length;
+    }
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing purposes
+};
