@@ -134,9 +134,8 @@ export default class Countdown extends Component {
   }
 
   saveTimer = async () => {
-    const { startTime, endTime } = this.state.current.context;
+    const { startTime } = this.state.current.context;
     const rawStartTime = moment(startTime);
-    const rawEndTime = moment(endTime);
     try {
       const res = await fetch("/v1/timers", {
         method: "POST",
@@ -194,9 +193,9 @@ export default class Countdown extends Component {
   renderDocumentTitle = (delta) => {
     if (delta !== undefined) {
       if (this.state.current.matches("extending")) {
-        window.document.title = 'Buzzzz!!! Take a break' + ' | Tomato Coffee';
+        window.document.title = 'Buzzzz!!! Take a break | Tomato Coffee';
       } else {
-        window.document.title = '' + pad(delta.minutes, 2) + ':' + pad(delta.seconds, 2) + ' | ' + 'Tomato Coffee';
+        window.document.title = '' + pad(delta.minutes, 2) + ':' + pad(delta.seconds, 2) + ' | Tomato Coffee';
       }
     }
   }

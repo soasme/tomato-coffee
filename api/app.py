@@ -16,7 +16,6 @@ def create_app():
         'GITHUB_CLIENT_SECRET': environ.get('GITHUB_CLIENT_SECRET'),
         'GITHUB_REDIRECT_URI': environ.get('GITHUB_REDIRECT_URI'),
     })
-    print(app.config)
 
     from .core import db
     db.init_app(app)

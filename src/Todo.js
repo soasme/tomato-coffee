@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
 

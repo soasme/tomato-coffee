@@ -185,7 +185,7 @@ export default class History extends Component {
               <h3>{this.renderDate(date)}</h3>
               {events.map(event => {
                 let obj;
-                if (event.type == 'todo') {
+                if (event.type === 'todo') {
                   obj = this.state.todos[event.id]
                   return (
                     <div className="Record" key={"todo" + event.id}>
@@ -198,7 +198,7 @@ export default class History extends Component {
                       </span>
                     </div>
                   )
-                } else if (event.type == 'timer') {
+                } else if (event.type === 'timer') {
                   obj = this.state.timers[event.id]
                   return (
                     <div className="Record" key={"timer" + event.id}>
@@ -206,7 +206,8 @@ export default class History extends Component {
                         {this.renderTime(obj.started_at * 1000)} - {this.renderTime(obj.ended_at * 1000)}
                       </span>
                       &nbsp;
-                      <span className="Record-content" style={{fontSize: '2rem'}}>&nbsp;🍅</span>
+                      &nbsp;
+                      <span className="Record-content" style={{fontSize: '2rem'}}>🍅</span>
                     </div>
                   )
                 }

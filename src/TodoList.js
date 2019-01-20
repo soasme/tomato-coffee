@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, { Component } from 'react'
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import TodoItem from './TodoItem'
 import Footer from './TodoFooter'

@@ -1,11 +1,4 @@
-import React, {PropTypes, Component} from 'react'
-import classnames from 'classnames'
-
-const FILTER_TITLES = {
-  SHOW_ALL: 'All',
-  SHOW_ACTIVE: 'Active',
-  SHOW_COMPLETED: 'Completed'
-}
+import React, { Component } from 'react'
 
 export default class Footer extends Component {
   // static propTypes = {
@@ -25,20 +18,6 @@ export default class Footer extends Component {
       <div className="todo-count">
         <strong>{activeCount || 'No'}</strong> <span>{itemWord} left</span>
       </div>
-    )
-  }
-
-  renderFilterLink(filter) {
-    const title = FILTER_TITLES[filter]
-    const {filter: selectedFilter, onShow} = this.props
-
-    return (
-      <a
-        className={classnames({ selected: filter === selectedFilter })}
-        style={{cursor: 'pointer' }}
-        onClick={() => onShow(filter)}>
-        {title}
-      </a>
     )
   }
 

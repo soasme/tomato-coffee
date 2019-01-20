@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react'
+import React from 'react'
 import TodoTextInput from './TodoTextInput'
 
 const Header = ({addTodo}) => {
