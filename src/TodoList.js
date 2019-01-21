@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import {SortableContainer, SortableElement } from 'react-sortable-hoc';
 import TodoItem from './TodoItem'
 import Footer from './TodoFooter'
 
@@ -73,7 +73,7 @@ import Footer from './TodoFooter'
      }, 0)
 
      const SortableTodoItem = SortableElement(({ value }) =>
-       <TodoItem key={value.id} todo={value} {...actions} />
+       <TodoItem key={value.id} todo={value} useDragHandle={true} {...actions} />
      );
      const SortableTodoList = SortableContainer(({ items }) => {
         return <ul className="todo-list">
@@ -86,7 +86,7 @@ import Footer from './TodoFooter'
      return (
        <section className="main">
          {this.renderToggleAll(completedCount)}
-         <SortableTodoList items={filteredTodos} onSortEnd={this.handleSort} distance={10}/>
+         <SortableTodoList items={filteredTodos} onSortEnd={this.handleSort} distance={10} useDragHandle={true}/>
          {this.renderFooter(completedCount)}
        </section>
      )

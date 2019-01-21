@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
+import { SortableHandle } from 'react-sortable-hoc';
 import TodoTextInput from './TodoTextInput'
+
+const DragHandle = SortableHandle(() => <div class="todo-handle">::</div>);
 
 export default class TodoItem extends Component {
   // static propTypes = {
@@ -42,6 +45,7 @@ export default class TodoItem extends Component {
     } else {
       element = (
         <div className="view">
+          {this.props.useDragHandle ? <DragHandle /> : <></> }
           <input
             className="toggle"
             type="checkbox"
