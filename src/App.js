@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import './App.css';
 
 import Dashboard from './Dashboard';
 
-const Index = () => (
-  <div className="App">
-    <Link to="/app">Launch App</Link>
-  </div>
-);
+import Home from './pages/Home';
 
 const About = () => <h2>About</h2>;
 
@@ -44,7 +40,7 @@ class Callback extends Component {
 const AppRouter = () => (
   <Router>
     <div>
-      <Route path="/" exact component={Index} />
+      <Route path="/" exact component={Home} />
       <Route path="/about" component={About} />
       <Route path="/app" component={Dashboard} />
       <Route path="/auth/github/callback" component={Callback} />
