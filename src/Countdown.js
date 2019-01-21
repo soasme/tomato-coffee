@@ -5,6 +5,8 @@ import moment from 'moment';
 import { interpret } from 'xstate/lib/interpreter';
 import { pad } from './Utils';
 
+import CancelButton from './components/CancelButton';
+
 import './Countdown.css';
 
 const { assign } = actions;
@@ -247,7 +249,7 @@ export default class Countdown extends Component {
                 renderer={this.renderTimer}/>
             </div>
           </div>
-          <CountdownTerminator onTerminate={() => send('CANCLE')} />
+          <CancelButton onCancel={() => send('CANCLE')} />
         </div>
       )
     }
@@ -257,7 +259,7 @@ export default class Countdown extends Component {
       return (
         <div className="Countdown" onClick={onClick}>
           <CountdownLabel text="Click to take a break!" />
-          <CountdownTerminator onTerminate={() => send('CANCLE')} />
+          <CancelButton onCancel={() => send('CANCLE')} />
         </div>
       )
     }

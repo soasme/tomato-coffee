@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Countdown, {CountdownLabel, CountdownTerminator} from './Countdown';
+import CancelButton from './components/CancelButton';
+
+import Countdown, {CountdownLabel } from './Countdown';
 
 test("Show 'start tomato timer' initially.", () => {
   const e = shallow(<Countdown />);
@@ -26,7 +28,7 @@ test("Cancle the working timer", () => {
 
   // Click start, and then click cancel
   e.find(".Countdown").simulate("click");
-  e.find(CountdownTerminator).shallow().simulate('click');
+  e.find(CancelButton).shallow().simulate('click');
 
   // After canceling, it should render the initial button.
   const ui = e.find(CountdownLabel);
