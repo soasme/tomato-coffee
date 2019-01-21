@@ -76,20 +76,13 @@ export class CountdownLabel extends Component {
   render () {
     return (
       <div className="Countdown-container">
-        <span className="Countdown-start">
+        {this.props.children ? this.props.children :
+        <span className="Countdown-label">
           {this.props.text}
-        </span>
+        </span>}
       </div>
     );
   }
-}
-
-export class CountdownTerminator extends Component {
-
-  render () {
-    return <div className="Countdown-stop" onClick={() => this.props.onTerminate()}>x</div>
-  }
-
 }
 
 export default class Countdown extends Component {
@@ -240,15 +233,15 @@ export default class Countdown extends Component {
       const endTime = moment(current.context.endTime);
       return (
         <div className="Countdown">
-          <div className="Countdown-container">
-            <div className="Countdown-timer">
+          <CountdownLabel>
+            <div className="Countdown-label">
               <CountdownTimer
                 onComplete={onComplete}
                 onTick={this.renderDocumentTitle}
                 date={endTime.toDate()}
                 renderer={this.renderTimer}/>
             </div>
-          </div>
+          </CountdownLabel>
           <CancelButton onCancel={() => send('CANCLE')} />
         </div>
       )

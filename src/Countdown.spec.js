@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+
+import { default as CountdownTimer } from 'react-countdown-now';
 import CancelButton from './components/CancelButton';
 
 import Countdown, {CountdownLabel } from './Countdown';
@@ -20,7 +22,7 @@ test("Start counting down when clicking the start button", () => {
   e.find(".Countdown").simulate("click");
 
   // Discover the timer
-  expect(e.find(".Countdown-timer").exists()).toBeTruthy();
+  expect(e.find(CountdownTimer).exists()).toBeTruthy();
 })
 
 test("Cancle the working timer", () => {
@@ -36,5 +38,5 @@ test("Cancle the working timer", () => {
   expect(ui.prop('text')).toEqual('Start Tomato Timer');
 
   // And there should be no timer.
-  expect(e.find(".Countdown-timer").exists()).toBeFalsy();
+  expect(e.find(CountdownTimer).exists()).toBeFalsy();
 })

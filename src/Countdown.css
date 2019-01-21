@@ -13,15 +13,10 @@
   user-select: none;
 }
 
-.Countdown-start {
+.Countdown-label {
   display: block;
   padding: 10px;
 }
-
-.Countdown-timer {
-  padding: 10px;
-}
-
 
 .Countdown-stop:hover {
   background-color: #9C9C97;
