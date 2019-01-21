@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 
 import Home from './pages/Home';
 import About from './pages/About';
+import SignIn from './pages/SignIn';
 
 class Callback extends Component {
 
@@ -42,6 +43,7 @@ const AppRouter = () => (
       <Route path="/" exact component={Home} />
       <Route path="/about" component={About} />
       <Route path="/app" component={Dashboard} />
+      <Route path="/accounts/signin" component={SignIn} />
       <Route path="/auth/github/callback" component={Callback} />
     </div>
   </Router>

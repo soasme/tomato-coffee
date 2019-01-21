@@ -1,0 +1,9 @@
+.signin-button {
+  padding: 10px;
+  border: solid 1px #eee;
+  background: #fff;
+}
+
+.signin-button-error {
+  font-size: 0.8rem;
+}
