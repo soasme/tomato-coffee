@@ -69,6 +69,27 @@ const countdownMachine = Machine({
   }
 });
 
+export class CountdownLabel extends Component {
+
+  render () {
+    return (
+      <div className="Countdown-container">
+        <span className="Countdown-start">
+          {this.props.text}
+        </span>
+      </div>
+    );
+  }
+}
+
+export class CountdownTerminator extends Component {
+
+  render () {
+    return <div className="Countdown-stop" onClick={() => this.props.onTerminate()}>x</div>
+  }
+
+}
+
 export default class Countdown extends Component {
 
   state = {
@@ -207,9 +228,7 @@ export default class Countdown extends Component {
     if (current.matches("idle")) {
       return (
         <div className="Countdown" onClick={this.activate}>
-          <div className="Countdown-container">
-            <span className="Countdown-start">Start Tomato Timer</span>
-          </div>
+          <CountdownLabel text="Start Tomato Timer" />
         </div>
       )
     }
@@ -228,7 +247,7 @@ export default class Countdown extends Component {
                 renderer={this.renderTimer}/>
             </div>
           </div>
-          <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
+          <CountdownTerminator onTerminate={() => send('CANCLE')} />
         </div>
       )
     }
@@ -237,10 +256,8 @@ export default class Countdown extends Component {
       const onClick = current.matches("syncing") ? (e) => {} : this.sync;
       return (
         <div className="Countdown" onClick={onClick}>
-          <div className="Countdown-container">
-            <span className="Countdown-start">Click to Take a break.</span>
-          </div>
-          <div className="Countdown-stop" onClick={() => send("CANCLE")}>x</div>
+          <CountdownLabel text="Click to take a break!" />
+          <CountdownTerminator onTerminate={() => send('CANCLE')} />
         </div>
       )
     }
