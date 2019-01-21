@@ -207,7 +207,7 @@ export default class History extends Component {
                       </span>
                       &nbsp;
                       &nbsp;
-                      <span className="Record-content" style={{fontSize: '2rem'}}>🍅</span>
+                      <span role="img" aria-labelledby="Tomato" className="Record-content" style={{fontSize: '2rem'}}>🍅</span>
                     </div>
                   )
                 }
