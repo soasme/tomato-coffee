@@ -6,8 +6,7 @@ import './App.css';
 import Dashboard from './Dashboard';
 
 import Home from './pages/Home';
-
-const About = () => <h2>About</h2>;
+import About from './pages/About';
 
 class Callback extends Component {
 
