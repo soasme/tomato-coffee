@@ -31,7 +31,7 @@ class Callback extends Component {
 
   render () {
     if (this.state.user) {
-      return <Redirect to="/"/>
+      return <Redirect to="/app"/>
     }
     return <p>Signing in...</p>
   }

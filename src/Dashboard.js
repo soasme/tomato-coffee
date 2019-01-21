@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import { Redirect } from "react-router-dom";
+
+
 import Header from './Header';
 import Tomato from './Tomato';
 import Todo from './Todo';
@@ -39,17 +42,16 @@ export default class Dashboard extends Component {
         return
       }
     }
-
-    const authorizeRes = await fetch("/v1/auth/login")
-    const authorise = await authorizeRes.json()
-    const authorizeURL = authorise['url']
-    window.location.href=  authorizeURL;
-    return new Promise(() => {})
+    this.setState({error: 'unauthorized'})
   }
 
   render () {
     if (this.state.error) {
-      return <p>{this.state.error}</p>
+      if (this.state.error === 'unauthorized') {
+        return <Redirect to={'/accounts/signin'} />
+      } else {
+        return <p>{this.state.error}</p>
+      }
     }
     if (!this.state.auth) {
       return <p>Signin in...</p>
