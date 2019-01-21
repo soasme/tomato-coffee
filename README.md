@@ -1,4 +1,6 @@
+# Tomato Coffee
 
+Tomato Coffee is a Pomodoro + GTD tool.
 
 Init json server:
 
