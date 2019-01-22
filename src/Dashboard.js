@@ -31,15 +31,19 @@ export default class Dashboard extends Component {
       profile = JSON.parse(profile)
     }
     if (profile) {
-      const loginRes = await fetch("/v1/users", {
-        headers: {
-          'Authorization': 'Bearer ' + profile.token.access_token
+      try {
+        const loginRes = await fetch("/v1/users", {
+          headers: {
+            'Authorization': 'Bearer ' + profile.token.access_token
+          }
+        })
+        const user = await loginRes.json()
+        if (user) {
+          this.setState({auth: user})
+          return
         }
-      })
-      const user = await loginRes.json()
-      if (user) {
-        this.setState({auth: user})
-        return
+      } catch (error) {
+        this.setState({error: 'Something went wrong. Please refresh the page later.'})
       }
     }
     this.setState({error: 'unauthorized'})

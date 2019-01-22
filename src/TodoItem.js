@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { SortableHandle } from 'react-sortable-hoc';
 import TodoTextInput from './components/TodoTextInput'
 
-const DragHandle = SortableHandle(() => <div class="todo-handle">::</div>);
+const DragHandle = SortableHandle(() => <div className="todo-handle">::</div>);
 
 export default class TodoItem extends Component {
   // static propTypes = {

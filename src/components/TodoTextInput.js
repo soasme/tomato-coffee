@@ -39,7 +39,7 @@ export default class TodoTextInput extends Component {
         type="text"
         placeholder={this.props.placeholder || ''}
         autoFocus={true}
-        value={this.state.text}
+        value={this.state.text || ''}
         onBlur={this.handleBlur}
         onChange={this.handleChange}
         onKeyDown={this.handleSubmit} />
@@ -47,7 +47,7 @@ export default class TodoTextInput extends Component {
   }
 }
 
-TodoTextInput.defaultProps = {
+TodoTextInput.propTypes = {
    onSave: PropTypes.func.isRequired,
    text: PropTypes.string,
    placeholder: PropTypes.string,

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import './SignInButton.css';
 
@@ -13,18 +14,13 @@ class SignInButton extends Component {
     }
   }
 
-  redirect = async () => {
+  handleClick = async () => {
     this.setState({
       signing: true,
       error: null,
     })
     try {
-      // TODO: replace by this.props.onSignIn
-      const authorizeRes = await fetch("/v1/auth/login")
-      const authorise = await authorizeRes.json()
-      const authorizeURL = authorise['url']
-      window.location.href=  authorizeURL;
-      return new Promise(() => {});
+      await this.props.onSignIn();
     } catch (error) {
       this.setState({
         signing: false,
@@ -35,12 +31,16 @@ class SignInButton extends Component {
 
   render() {
     return <>
-      <button className="signin-button" onClick={this.redirect} disabled={this.state.signing}>
+      <button className="signin-button" onClick={this.handleClick} disabled={this.state.signing}>
         Sign In via GitHub{this.state.signing ? '...' : ''}
       </button>
       {this.state.error &&  <div className="signin-button-error">{this.state.error}</div> }
     </>
   }
+}
+
+SignInButton.propTypes = {
+  onSignIn: PropTypes.func.isRequired,
 }
 
 export default SignInButton;
