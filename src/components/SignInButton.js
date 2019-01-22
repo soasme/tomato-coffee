@@ -19,6 +19,7 @@ class SignInButton extends Component {
       error: null,
     })
     try {
+      // TODO: replace by this.props.onSignIn
       const authorizeRes = await fetch("/v1/auth/login")
       const authorise = await authorizeRes.json()
       const authorizeURL = authorise['url']

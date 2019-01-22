@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import { SortableHandle } from 'react-sortable-hoc';
-import TodoTextInput from './TodoTextInput'
+import TodoTextInput from './components/TodoTextInput'
 
 const DragHandle = SortableHandle(() => <div class="todo-handle">::</div>);
 

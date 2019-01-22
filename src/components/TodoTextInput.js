@@ -1,16 +1,10 @@
-import React, { Component } from 'react'
-import classnames from 'classnames'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
+import './TodoTextInput.css';
 
 export default class TodoTextInput extends Component {
-
-
-  // static propTypes = {
-  //   onSave: PropTypes.func.isRequired,
-  //   text: PropTypes.string,
-  //   placeholder: PropTypes.string,
-  //   editing: PropTypes.bool,
-  //   newTodo: PropTypes.bool
-  // }
 
   state = {
     text: this.props.text || ''
@@ -38,11 +32,12 @@ export default class TodoTextInput extends Component {
     return (
       <input className={
         classnames({
+          'todo-input': true,
           edit: this.props.editing,
           'new-todo': this.props.newTodo
         })}
         type="text"
-        placeholder={this.props.placeholder}
+        placeholder={this.props.placeholder || ''}
         autoFocus={true}
         value={this.state.text}
         onBlur={this.handleBlur}
@@ -51,3 +46,11 @@ export default class TodoTextInput extends Component {
     )
   }
 }
+
+TodoTextInput.defaultProps = {
+   onSave: PropTypes.func.isRequired,
+   text: PropTypes.string,
+   placeholder: PropTypes.string,
+   editing: PropTypes.bool,
+   newTodo: PropTypes.bool
+ }
