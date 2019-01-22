@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { Redirect } from "react-router-dom";
 
-
 import Header from './Header';
 import Tomato from './Tomato';
 import Todo from './Todo';
@@ -41,25 +40,30 @@ export default class Dashboard extends Component {
         if (user) {
           this.setState({auth: user})
           return
+        } else {
+          this.setState({auth: false})
         }
       } catch (error) {
         this.setState({error: 'Something went wrong. Please refresh the page later.'})
       }
+    } else {
+      this.setState({auth: false})
     }
-    this.setState({error: 'unauthorized'})
   }
 
   render () {
     if (this.state.error) {
-      if (this.state.error === 'unauthorized') {
-        return <Redirect to={'/accounts/signin'} />
-      } else {
-        return <p>{this.state.error}</p>
-      }
+      return <p>{this.state.error}</p>
     }
-    if (!this.state.auth) {
+
+    if (this.state.auth === null) {
       return <p>Signin in...</p>
     }
+
+    if (this.state.auth === false) {
+      return <Redirect to={'/accounts/signin'} />
+    }
+
     const { auth } = this.state
     return (
       <div className="Dashboard">

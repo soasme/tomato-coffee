@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import SignInButton from '../components/SignInButton';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 class SignIn extends Component {
 
@@ -15,7 +16,9 @@ class SignIn extends Component {
   render () {
     return (
       <div className="SignIn">
-        <SignInButton onSignIn={this.redirectToGitHub}/>
+        <ErrorBoundary>
+          <SignInButton onSignIn={this.redirectToGitHub}/>
+        </ErrorBoundary>
       </div>
     )
   }
