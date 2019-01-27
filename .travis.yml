@@ -1,12 +1,14 @@
-language: node_js
-node_js:
-  - "10"
-sudo: false
-cache:
-  yarn: true
-  directories:
-  - node_modules
-script:
-  - yarn install
-  - yarn test
-  - yarn run build
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "10"
+      sudo: false
+      cache:
+        yarn: true
+        directories:
+        - node_modules
+      script:
+        - yarn install
+        - yarn test
+        - yarn run build
