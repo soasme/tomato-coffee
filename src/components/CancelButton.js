@@ -7,4 +7,3 @@ export default class CancelButton extends Component {
     return <div className="cancel-button" onClick={() => this.props.onCancel()}>x</div>
   }
 }
-
