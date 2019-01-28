@@ -34,6 +34,10 @@ def create_app():
 
     from .models import User, UserToken
 
+    @app.route('/')
+    def index():
+        return jsonify({'message': 'Tomato Coffee = Pomodoro + GTD.'})
+
     @app.route('/v1/auth/login')
     def get_login_url():
         redirect_uri = app.config['GITHUB_REDIRECT_URI']
