@@ -41,15 +41,25 @@ resource "kubernetes_namespace" "prod" {
   }
 }
 
+variable "app-domain" {}
+
 resource "digitalocean_domain" "domain" {
-  name = "tomato.coffee"
+  name = "${var.app-domain}"
 }
 
-variable "app-domains" { type = "list" }
 
 resource "digitalocean_certificate" "cert" {
   name = "${var.cluster-name}"
   type = "lets_encrypt"
-  domains = ["${digitalocean_domain.domain.name}"]
+  domains = ["${var.app-domain}"]
 }
 
+provider "helm" {
+    kubernetes {
+        host = "${digitalocean_kubernetes_cluster.cluster.endpoint}"
+
+        client_certificate = "${base64decode(digitalocean_kubernetes_cluster.cluster.kube_config.0.client_certificate)}"
+        client_key = "${base64decode(digitalocean_kubernetes_cluster.cluster.kube_config.0.client_key)}"
+        cluster_ca_certificate = "${base64decode(digitalocean_kubernetes_cluster.cluster.kube_config.0.cluster_ca_certificate)}"
+    }
+}
