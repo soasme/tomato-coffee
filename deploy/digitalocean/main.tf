@@ -59,4 +59,18 @@ resource "local_file" "kubeconfig" {
   filename = "${path.module}/.kubeconfig"
 }
 
-
+# https://www.digitalocean.com/docs/kubernetes/how-to/add-volumes/
+resource "kubernetes_persistent_volume_claim" "db" {
+  metadata {
+    name = "db"
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    resources {
+      requests {
+        storage = "5Gi"
+      }
+    }
+    storage_class_name = "do-block-storage"
+  }
+}
