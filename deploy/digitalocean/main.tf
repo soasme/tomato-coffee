@@ -74,3 +74,10 @@ resource "kubernetes_persistent_volume_claim" "db" {
     storage_class_name = "do-block-storage"
   }
 }
+
+# $ kubectl --kubeconfig ./.kubeconfig get pv
+#   NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM        STORAGECLASS       REASON   AGE
+#   pvc-7917652f-24be-11e9-95a5-ce055e4cb34e   5Gi        RWO            Delete           Bound    default/db   do-block-storage            28s
+
+# https://github.com/helm/charts/tree/master/stable/postgresql
+# https://medium.com/kokster/postgresql-on-kubernetes-the-right-way-part-one-d174ee8a56e3
