@@ -40,7 +40,7 @@ export default Machine({
     },
     resting: {
       on: {
-        CANCLE: {
+        CANCEL: {
           target: 'idle',
         },
         DONE: {
