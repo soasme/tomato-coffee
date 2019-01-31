@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import './CancelButton.css';
 
-export default class CancelButton extends Component {
-  render () {
-    return <div className="cancel-button" onClick={() => this.props.onCancel()}>x</div>
-  }
+export default ({ onCancel }) => {
+  return (
+    <div className="cancel-button"
+      onClick={() => onCancel()}>
+      x
+    </div>
+  )
 }
