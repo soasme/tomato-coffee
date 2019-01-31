@@ -1,17 +1,12 @@
-import React, { Component } from 'react'
-import classnames from 'classnames'
+import React, { Component } from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import { SortableHandle } from 'react-sortable-hoc';
-import TodoTextInput from './components/TodoTextInput'
+import TodoTextInput from './TodoTextInput'
 
 const DragHandle = SortableHandle(() => <div className="todo-handle">::</div>);
 
 export default class TodoItem extends Component {
-  // static propTypes = {
-  //   todo: PropTypes.object.isRequired,
-  //   editTodo: PropTypes.func.isRequired,
-  //   deleteTodo: PropTypes.func.isRequired,
-  //   completeTodo: PropTypes.func.isRequired
-  // }
 
   state = {
     editing: false
@@ -67,4 +62,11 @@ export default class TodoItem extends Component {
       </li>
     )
   }
+}
+
+TodoItem.propTypes = {
+  todo: PropTypes.object.isRequired,
+  editTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired,
+  completeTodo: PropTypes.func.isRequired
 }

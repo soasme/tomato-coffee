@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import moment from 'moment';
 import Calendar from 'react-calendar';
-import g from './g';
+import g from '../g';
 
 import TodoItem from './TodoItem';
 

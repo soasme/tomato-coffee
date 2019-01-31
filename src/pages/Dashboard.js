@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 import moment from 'moment';
 
-import Header from '../Header';
-import Todo from '../Todo';
-import History from '../History';
+import Header from '../components/Header';
+import History from '../components/History';
+import Todo from '../components/Todo';
 import Pomodoro from '../components/Pomodoro';
 
 import './Dashboard.css';

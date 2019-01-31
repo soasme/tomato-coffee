@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import TodoList from './TodoList';
 import TodoHeader from './TodoHeader';
 
-import g from './g';
-import { arrayMove } from './Utils';
+import g from '../g';
+import { arrayMove } from '../Utils';
 
 import './Todo.css';
 

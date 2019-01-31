@@ -1,5 +1,5 @@
 import React from 'react'
-import TodoTextInput from './components/TodoTextInput'
+import TodoTextInput from './TodoTextInput'
 
 const Header = ({addTodo}) => {
 
