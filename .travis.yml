@@ -14,9 +14,7 @@ matrix:
         - yarn run build
       deploy:
         provider: script
-        script:
-          - APP_TAG=dash bash scripts/docker-build
-          - APP_TAG=dash bash scripts/docker-push
+        script: APP_TAG=dash bash scripts/deploy
         on:
           tags: true
     - language: python
@@ -33,8 +31,6 @@ matrix:
         - docker
       deploy:
         provider: script
-        script:
-          - APP_TAG=api bash scripts/docker-build
-          - APP_TAG=api bash scripts/docker-push
+        script: APP_TAG=api bash scripts/deploy
         on:
           tags: true

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -z "$APP_TAG" ]; then
+    bash scripts/docker-build
+    bash scripts/docker-push
+else
+    echo 'missing $APP_TAG.';
+    exit 1;
+fi
