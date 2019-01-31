@@ -14,6 +14,7 @@ matrix:
         - yarn run build
       deploy:
         provider: script
+        skip_cleanup: true
         script: APP_TAG=dash bash scripts/deploy
         on:
           tags: true
@@ -31,6 +32,7 @@ matrix:
         - docker
       deploy:
         provider: script
+        skip_cleanup: true
         script: APP_TAG=api bash scripts/deploy
         on:
           tags: true
