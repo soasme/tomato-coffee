@@ -12,6 +12,13 @@ matrix:
         - yarn install
         - yarn test
         - yarn run build
+      deploy:
+        provider: script
+        script:
+          - APP_TAG=dash bash scripts/docker-push
+          - APP_TAG=dash bash scripts/docker-push
+        on:
+          tags: true
     - language: python
       dist: xenial
       python:
@@ -26,6 +33,8 @@ matrix:
         - docker
       deploy:
         provider: script
-        script: bash scripts/docker-push
+        script:
+          - APP_TAG=api bash scripts/docker-push
+          - APP_TAG=api bash scripts/docker-push
         on:
           tags: true

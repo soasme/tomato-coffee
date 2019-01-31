@@ -4,8 +4,6 @@ set -e
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
-docker build -f ./dockerfiles/api.dockerfile -t $DOCKER_IMAGE_NAME:latest .;
-
 if [ ! -z "$TRAVIS_TAG" ]; then
-    docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$TRAVIS_TAG;
+    docker tag $DOCKER_IMAGE_NAME:${APP_TAG} $DOCKER_IMAGE_NAME:${TRAVIS_TAG}-${APP_TAG};
 fi && docker push $DOCKER_IMAGE_NAME

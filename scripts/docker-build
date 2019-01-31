@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+docker build -f ./dockerfiles/${APP_TAG}.dockerfile -t $DOCKER_IMAGE_NAME:${APP_TAG} .
