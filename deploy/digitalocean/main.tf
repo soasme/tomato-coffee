@@ -81,3 +81,46 @@ resource "kubernetes_persistent_volume_claim" "db" {
 
 # https://github.com/helm/charts/tree/master/stable/postgresql
 # https://medium.com/kokster/postgresql-on-kubernetes-the-right-way-part-one-d174ee8a56e3
+
+resource "kubernetes_service_account" "tiller" {
+  metadata {
+    name = "tiller"
+    namespace = "kube-system"
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "tiller" {
+  metadata {
+    name = "tiller"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind = "ClusterRole"
+    name = "cluster-admin"
+  }
+  subject {
+    # https://github.com/terraform-providers/terraform-provider-kubernetes/issues/204
+    api_group = ""
+    kind = "ServiceAccount"
+    name = "tiller"
+    namespace = "kube-system"
+  }
+ }
+
+
+provider "helm" {
+  install_tiller = true
+  service_account = "${kubernetes_service_account.tiller.metadata.0.name}"
+  kubernetes {
+    host = "${digitalocean_kubernetes_cluster.cluster.endpoint}"
+    config_path = "${path.module}/.kubeconfig"
+  }
+}
+
+resource "helm_release" "db" {
+  name = "db"
+  chart = "stable/postgresql"
+  values = [
+    "${file("db-values.yaml")}"
+  ]
+}
