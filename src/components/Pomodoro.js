@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Countdown from 'react-countdown-now';
 import PropTypes from 'prop-types';
-import { State } from 'xstate';
 import moment from 'moment';
 import { interpret } from 'xstate/lib/interpreter';
 import { pad } from '../Utils';
+
+import './Pomodoro.css';
 
 import CancelButton from './CancelButton';
 import PomodoroFSM from './PomodoroFSM';
@@ -65,7 +66,9 @@ export default class Pomodoro extends Component {
         error: error.toString()
       })
     }
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
   }
 
   cancelPomodoro = () => {
@@ -110,15 +113,17 @@ export default class Pomodoro extends Component {
   render() {
     const { current } = this.state;
     return (
-      <div className="Countdown" onClick={this.handleClick}>
-        {current.matches("idle") && <span>Start Pomodoro Timer</span> }
-        {(current.matches("working") || current.matches("resting")) &&
-          <Countdown
-            onComplete={this.endPomodoro}
-            onTick={this.renderDocumentTitle}
-            date={moment(current.context.endTime).toDate()}
-            renderer={this.renderTimer}/>}
-        {(current.matches("extending") || current.matches("syncing")) && <span>Click to take a break!</span> }
+      <div className="pomodoro" onClick={this.handleClick}>
+        <div className="pomodoro-container">
+          {current.matches("idle") && <span>Start Pomodoro Timer</span> }
+          {(current.matches("working") || current.matches("resting")) &&
+            <Countdown
+              onComplete={this.endPomodoro}
+              onTick={this.renderDocumentTitle}
+              date={moment(current.context.endTime).toDate()}
+              renderer={this.renderTimer}/>}
+         {(current.matches("extending") || current.matches("syncing")) && <span>Click to take a break!</span> }
+        </div>
         {!current.matches("idle") && <CancelButton onCancel={this.handleCancel} />}
       </div>
     )

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
 import { Redirect } from "react-router-dom";
+import moment from 'moment';
 
 import Header from '../Header';
-import Tomato from '../Tomato';
 import Todo from '../Todo';
 import History from '../History';
+import Pomodoro from '../components/Pomodoro';
 
 import './Dashboard.css';
 
@@ -51,6 +52,23 @@ export default class Dashboard extends Component {
     }
   }
 
+  saveTimer = async ({ startTime }) => {
+    const res = await fetch("/v1/timers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
+      },
+      body: JSON.stringify({
+        started_at: moment(startTime).unix(),
+        ended_at: moment().unix()
+      })
+    })
+    if (res.status !== 201) {
+      throw new Error("Server responsed " + res.status)
+    }
+  }
+
   render () {
     if (this.state.error) {
       return <p>{this.state.error}</p>
@@ -70,7 +88,7 @@ export default class Dashboard extends Component {
         <Header user={ auth }/>
         <div style={{display: "flex"}}>
           <div className="sidebar">
-            <Tomato />
+            <Pomodoro onSubmit={this.saveTimer} />
             <Todo />
           </div>
           <div className="container">
