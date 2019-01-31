@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import { Redirect } from "react-router-dom";
 
-import Header from './Header';
-import Tomato from './Tomato';
-import Todo from './Todo';
-import History from './History';
+import Header from '../Header';
+import Tomato from '../Tomato';
+import Todo from '../Todo';
+import History from '../History';
 
 import './Dashboard.css';
 

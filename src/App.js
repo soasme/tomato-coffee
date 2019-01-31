@@ -3,11 +3,10 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 
 import './App.css';
 
-import Dashboard from './Dashboard';
-
 import Home from './pages/Home';
 import About from './pages/About';
 import SignIn from './pages/SignIn';
+import Dashboard from './pages/Dashboard';
 
 class Callback extends Component {
 
