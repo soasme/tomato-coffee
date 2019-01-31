@@ -15,7 +15,7 @@ matrix:
       deploy:
         provider: script
         script:
-          - APP_TAG=dash bash scripts/docker-push
+          - APP_TAG=dash bash scripts/docker-build
           - APP_TAG=dash bash scripts/docker-push
         on:
           tags: true
@@ -34,7 +34,7 @@ matrix:
       deploy:
         provider: script
         script:
-          - APP_TAG=api bash scripts/docker-push
+          - APP_TAG=api bash scripts/docker-build
           - APP_TAG=api bash scripts/docker-push
         on:
           tags: true
