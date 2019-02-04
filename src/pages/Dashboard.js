@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import History from '../components/History';
 import Todo from '../components/Todo';
 import Pomodoro from '../components/Pomodoro';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 import './Dashboard.css';
 
@@ -16,7 +17,6 @@ export default class Dashboard extends Component {
     super(props)
 
     this.state = {
-      error: null,
       auth: null
     }
   }
@@ -31,21 +31,17 @@ export default class Dashboard extends Component {
       profile = JSON.parse(profile)
     }
     if (profile) {
-      try {
-        const loginRes = await fetch("/v1/users", {
-          headers: {
-            'Authorization': 'Bearer ' + profile.token.access_token
-          }
-        })
-        const user = await loginRes.json()
-        if (user) {
-          this.setState({auth: user})
-          return
-        } else {
-          this.setState({auth: false})
+      const loginRes = await fetch("/v1/users", {
+        headers: {
+          'Authorization': 'Bearer ' + profile.token.access_token
         }
-      } catch (error) {
-        this.setState({error: 'Something went wrong. Please refresh the page later.'})
+      })
+      const user = await loginRes.json()
+      if (user) {
+        this.setState({auth: user})
+        return
+      } else {
+        this.setState({auth: false})
       }
     } else {
       this.setState({auth: false})
@@ -70,10 +66,6 @@ export default class Dashboard extends Component {
   }
 
   render () {
-    if (this.state.error) {
-      return <p>{this.state.error}</p>
-    }
-
     if (this.state.auth === null) {
       return <p>Signin in...</p>
     }
@@ -84,18 +76,20 @@ export default class Dashboard extends Component {
 
     const { auth } = this.state
     return (
-      <div className="Dashboard">
-        <Header user={ auth }/>
-        <div style={{display: "flex"}}>
-          <div className="sidebar">
-            <Pomodoro onSubmit={this.saveTimer} />
-            <Todo />
-          </div>
-          <div className="container">
-            <History />
+      <ErrorBoundary>
+        <div className="dashboard">
+          <Header user={ auth }/>
+          <div style={{display: "flex"}}>
+            <div className="sidebar">
+              <Pomodoro onSubmit={this.saveTimer} />
+              <Todo />
+            </div>
+            <div className="container">
+              <History />
+            </div>
           </div>
         </div>
-      </div>
+      </ErrorBoundary>
     )
   }
 }

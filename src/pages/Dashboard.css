@@ -1,14 +1,14 @@
-.Dashboard {
+.dashboard {
   margin: 0 auto;
   min-width: 640px;
   max-width: 960px;
 }
 
-.Dashboard .sidebar {
+.dashboard .sidebar {
   width: 35%;
 }
 
-.Dashboard .container {
+.dashboard .container {
   width: 65%;
   margin: 10px;
 }
