@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import Header from '../components/Header';
 import History from '../components/History';
-import Todo from '../components/Todo';
 import Pomodoro from '../components/Pomodoro';
 import ErrorBoundary from '../components/ErrorBoundary';
 
@@ -82,7 +81,6 @@ export default class Dashboard extends Component {
           <div style={{display: "flex"}}>
             <div className="sidebar">
               <Pomodoro onSubmit={this.saveTimer} />
-              <Todo />
             </div>
             <div className="container">
               <History />

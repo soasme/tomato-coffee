@@ -19,7 +19,7 @@ class Global {
   }
 
   loadTimers = async ({ startTime, endTime}) => {
-    const res = await fetch(this.buildUrl("/v1/timers", {ended_at_gte: startTime, ended_at_lte: endTime}), {
+    const res = await fetch(this.buildUrl("/v1/timers", {started_at_gte: startTime, ended_at_lte: endTime}), {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
