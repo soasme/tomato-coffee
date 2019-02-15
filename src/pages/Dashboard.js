@@ -16,7 +16,10 @@ export default class Dashboard extends Component {
     super(props)
 
     this.state = {
-      auth: null
+      error: null,
+      auth: null,
+      timers: {},
+      events: {},
     }
   }
 
@@ -64,6 +67,32 @@ export default class Dashboard extends Component {
     }
   }
 
+  loadEvents = async ({ startTime, endTime }) => {
+    try {
+      const events = {}
+      const timers = {}
+      const res = await fetch("/v1/timers?started_at_gte=" +  startTime.unix() + "&ended_at_lte=" + endTime.unix(), {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + JSON.parse(window.localStorage.getItem("profile")).token.access_token
+        }
+      })
+      const rawTimers = await res.json()
+      rawTimers.forEach(timer => {
+        timers[timer.id] = timer
+        const date = moment(new Date(timer.ended_at * 1000)).hour(0).minute(0).second(0).toDate();
+        if (!events[date]) {
+          events[date] = []
+        }
+        events[date].push({type: 'timer', id: timer.id})
+      })
+
+      this.setState({timers: timers, events: events})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   render () {
     if (this.state.auth === null) {
       return <p>Signin in...</p>
@@ -73,7 +102,7 @@ export default class Dashboard extends Component {
       return <Redirect to={'/accounts/signin'} />
     }
 
-    const { auth } = this.state
+    const { auth, timers, events } = this.state
     return (
       <ErrorBoundary>
         <div className="dashboard">
@@ -83,7 +112,7 @@ export default class Dashboard extends Component {
               <Pomodoro onSubmit={this.saveTimer} />
             </div>
             <div className="container">
-              <History />
+              <History timers={timers} events={events} onUpdate={this.loadEvents} />
             </div>
           </div>
         </div>
