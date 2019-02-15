@@ -1,6 +1,7 @@
 import json
 from os import environ
 from flask import Flask, url_for, jsonify, request
+from flask_graphql import GraphQLView
 
 def create_app():
     app = Flask(__name__)
@@ -94,5 +95,17 @@ def create_app():
     app.add_url_rule('/v1/tasks', methods=['POST'], view_func=views.add_task)
     app.add_url_rule('/v1/tasks/<int:id>', methods=['PATCH'], view_func=views.update_task)
     app.add_url_rule('/v1/tasks/<int:id>', methods=['DELETE'], view_func=views.delete_task)
+
+    from .schema import schema
+
+    app.add_url_rule(
+        '/graphql',
+        view_func=GraphQLView.as_view(
+            'graphql',
+            schema=schema,
+            graphiql=True,
+            get_context=lambda: {'session': db.session},
+        )
+    )
 
     return app
